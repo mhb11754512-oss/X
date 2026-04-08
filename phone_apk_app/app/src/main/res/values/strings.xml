@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Project X Phone</string>
+    <string name="set_server_url">Server URL</string>
+    <string name="set_server_url_message">Paste your phone page URL (example: https://your-domain/phone)</string>
+    <string name="save_and_open">Save and Open</string>
+    <string name="bg_service_channel_name">Background Service</string>
+    <string name="bg_service_channel_desc">Keeps Project X Phone active in background</string>
+    <string name="bg_service_title">Project X Phone is running</string>
+    <string name="bg_service_text">Background mode is active</string>
+</resources>

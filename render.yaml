@@ -1,0 +1,54 @@
+services:
+  - type: web
+    name: project-x
+    runtime: python
+    plan: starter
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn --worker-class geventwebsocket.gunicorn.workers.GeventWebSocketWorker --workers 1 --bind 0.0.0.0:$PORT wsgi:application"
+    healthCheckPath: /healthz
+    scaling:
+      minInstances: 1
+      maxInstances: 1
+    disk:
+      name: project-x-data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 10
+    envVars:
+      - key: DATABASE_PATH
+        value: /opt/render/project/src/data/project_x.db
+      - key: UPLOAD_FOLDER
+        value: /opt/render/project/src/data/uploads
+      - key: LOG_FILE_PATH
+        value: /opt/render/project/src/data/logs/project_x.log
+      - key: HOST
+        value: 0.0.0.0
+      - key: ENABLE_CLOUDFLARED_TUNNEL
+        value: "0"
+      - key: SESSION_COOKIE_SECURE
+        value: "1"
+      - key: SESSION_COOKIE_SAMESITE
+        value: Lax
+      - key: SESSION_TTL_HOURS
+        value: "12"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_SECRET
+        generateValue: true
+      - key: AI_PROVIDER
+        value: auto
+      - key: XAI_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: HF_API_KEY
+        sync: false
+      - key: WAWP_ACCESS_TOKEN
+        sync: false
+      - key: WAWP_INSTANCE_ID
+        sync: false
+      - key: WAWP_WEBHOOK_SECRET
+        sync: false
+      - key: WAWP_SITE_VISITOR_NOTIFY_NUMBER
+        sync: false
+      - key: WAWP_SITE_VISITOR_NOTIFY_NUMBERS
+        sync: false

@@ -1,0 +1,10 @@
+Flask
+Flask-Cors
+Flask-SocketIO
+gevent
+gevent-websocket
+gunicorn
+python-dotenv
+requests
+qrcode[pil]
+Werkzeug

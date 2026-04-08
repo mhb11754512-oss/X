@@ -1,0 +1,103 @@
+# Environment variables with secrets
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Database (actual data)
+database/*.db
+database/*.sqlite
+database/*.sqlite3
+*.db
+data/
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Uploads (user-generated content)
+uploads/
+static/uploads/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Operating System
+Thumbs.db
+.DS_Store
+
+# Android build artifacts
+phone_apk_app/.gradle/
+phone_apk_app/build/
+phone_apk_app/app/build/
+phone_apk_app/.idea/
+phone_apk_app/.tools/
+phone_apk_app/local.properties
+phone_apk_app/*.apk
+phone_apk_app/*.aab
+
+# Build artifacts
+*.apk
+*.aab
+*.zip
+
+# Executables
+*.exe
+cloudflared-windows-amd64.exe
+cloudflared.exe
+
+# Media/Images
+صور/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.mov
+*.mp4
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+
+# OS-specific
+desktop.ini
+.Thumbs.db
