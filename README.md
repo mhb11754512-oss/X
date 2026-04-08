@@ -1,4 +1,11 @@
-# Project X - Remote Device Control System
+# Project X
+
+Remote Device Control Platform with WhatsApp, geolocation, and Socket.IO realtime control.
+
+[![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-Web_App-000000?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![Socket.IO](https://img.shields.io/badge/Socket.IO-Realtime-010101?logo=socketdotio&logoColor=white)](https://socket.io/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 نظام تحكم عن بعد في الأجهزة مع دعم WhatsApp، الموقع الجغرافي، والتشغيل اللحظي عبر Socket.IO.
 
