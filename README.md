@@ -1,4 +1,4 @@
-# Project X
+# Project X - Remote Device Control System
 
 Remote Device Control Platform with WhatsApp, geolocation, and Socket.IO realtime control.
 
